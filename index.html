@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d0d1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MFF Quest">
+<title>MFF Quest Tracker</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0d0d1a">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0d0d1a;
+  --bg2: #13132a;
+  --bg3: #1a1a35;
+  --bg4: #22224a;
+  --gold: #e8c04a;
+  --gold2: #f5d878;
+  --gold-dim: rgba(232,192,74,0.15);
+  --green: #3ecf8e;
+  --green-dim: rgba(62,207,142,0.15);
+  --red: #ff5f5f;
+  --red-dim: rgba(255,95,95,0.12);
+  --blue: #5b8dee;
+  --blue-dim: rgba(91,141,238,0.15);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.15);
+  --text: #e8e8f0;
+  --text2: #9090b0;
+  --text3: #5a5a80;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  overscroll-behavior: none;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 16px 10px;
+  flex-shrink: 0;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-icon {
+  width: 32px; height: 32px;
+  background: var(--gold-dim);
+  border: 1px solid rgba(232,192,74,0.4);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.logo-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--gold); letter-spacing: 0.5px;
+}
+.logo-sub { font-size: 10px; color: var(--text3); letter-spacing: 0.5px; }
+.header-date { font-size: 12px; color: var(--text2); text-align: right; }
+
+.progress-bar-wrap {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 8px 12px;
+}
+.mini-ring { position: relative; width: 40px; height: 40px; flex-shrink: 0; }
+.mini-ring svg { transform: rotate(-90deg); }
+.mini-ring-label {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px; font-weight: 700; color: var(--gold);
+}
+.progress-info { flex: 1; min-width: 0; }
+.progress-title { font-size: 12px; font-weight: 600; color: var(--text); }
+.progress-sub { font-size: 11px; color: var(--text2); }
+.reset-badge {
+  font-size: 10px; background: var(--gold-dim); color: var(--gold);
+  border: 1px solid rgba(232,192,74,0.3); border-radius: 20px;
+  padding: 2px 8px; display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 3px; white-space: nowrap;
+}
+
+.tabs {
+  display: flex; background: var(--bg2);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.tab-btn {
+  flex: 1; padding: 10px 0; font-size: 12px; font-weight: 600;
+  color: var(--text3); background: none; border: none;
+  border-bottom: 2px solid transparent; cursor: pointer;
+  transition: color 0.2s, border-color 0.2s; letter-spacing: 0.3px;
+}
+.tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+.content {
+  flex: 1; overflow-y: auto; padding: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+.content::-webkit-scrollbar { display: none; }
+
+.section-label {
+  font-size: 10px; font-weight: 600; color: var(--text3);
+  letter-spacing: 1px; text-transform: uppercase; padding: 4px 2px 6px;
+}
+
+.quest-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  transition: opacity 0.2s; user-select: none;
+}
+.quest-card:active { transform: scale(0.98); }
+.quest-card.done { opacity: 0.45; }
+.quest-card.done .quest-name { text-decoration: line-through; color: var(--text3); }
+
+.checkbox {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 12px; transition: all 0.2s;
+}
+.checkbox.checked { background: var(--green); border-color: var(--green); color: #0d0d1a; }
+
+.quest-body { flex: 1; min-width: 0; }
+.quest-name {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.quest-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.quest-tag { font-size: 10px; color: var(--text3); }
+.quest-type-badge {
+  font-size: 9px; padding: 1px 6px; border-radius: 20px;
+  font-weight: 600; letter-spacing: 0.3px;
+}
+.badge-daily  { background: var(--blue-dim);   color: var(--blue); }
+.badge-weekly { background: var(--purple-dim); color: var(--purple); }
+.badge-special{ background: var(--gold-dim);   color: var(--gold); }
+.quest-reward {
+  font-family: 'Rajdhani', sans-serif; font-size: 13px;
+  font-weight: 700; color: var(--gold); white-space: nowrap;
+}
+.edit-btn { padding: 4px; color: var(--text3); font-size: 16px; cursor: pointer; flex-shrink:0; }
+
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+.bottom-nav {
+  background: var(--bg2); border-top: 1px solid var(--border);
+  display: flex; flex-shrink: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  padding: 8px 0; cursor: pointer; color: var(--text3);
+  transition: color 0.15s; font-size: 10px; gap: 3px;
+  border: none; background: none;
+}
+.nav-item.active { color: var(--gold); }
+.nav-icon { font-size: 20px; }
+
+.modal-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.7);
+  display: flex; align-items: flex-end;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 100;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--bg2); border-top: 1px solid var(--border2);
+  border-radius: 20px 20px 0 0; width: 100%; padding: 20px 16px;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-handle {
+  width: 36px; height: 4px; background: var(--border2);
+  border-radius: 2px; margin: 0 auto 16px;
+}
+.modal-title {
+  font-family: 'Rajdhani', sans-serif; font-size: 18px;
+  font-weight: 700; color: var(--gold); margin-bottom: 16px;
+}
+.modal-input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 10px 12px; color: var(--text);
+  font-family: 'Noto Sans Thai', sans-serif; font-size: 14px;
+  margin-bottom: 10px; outline: none;
+}
+.modal-input:focus { border-color: var(--gold); }
+.modal-select {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 10px 12px; color: var(--text);
+  font-family: 'Noto Sans Thai', sans-serif; font-size: 14px;
+  margin-bottom: 10px; outline: none; -webkit-appearance: none;
+}
+.modal-row { display: flex; gap: 8px; }
+.btn {
+  flex: 1; padding: 12px; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 600; cursor: pointer; border: none;
+  font-family: 'Noto Sans Thai', sans-serif; transition: opacity 0.15s;
+}
+.btn:active { opacity: 0.8; }
+.btn-primary { background: var(--gold); color: #0d0d1a; }
+.btn-ghost { background: var(--bg3); color: var(--text2); border: 1px solid var(--border2); }
+.btn-danger { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,95,95,0.3); }
+
+.subpage {
+  display: none; flex-direction: column; flex: 1;
+  overflow-y: auto; padding: 12px;
+}
+.subpage.show { display: flex; }
+
+.settings-section {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); margin-bottom: 12px; overflow: hidden;
+}
+.settings-header {
+  padding: 10px 14px; font-size: 11px; font-weight: 600;
+  color: var(--text3); letter-spacing: 0.8px; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.settings-row {
+  display: flex; align-items: center; padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-label { flex: 1; font-size: 13px; color: var(--text); }
+.settings-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+.notify-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+}
+.notify-title {
+  font-family: 'Rajdhani', sans-serif; font-size: 16px;
+  font-weight: 700; color: var(--gold); margin-bottom: 4px;
+}
+.notify-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+.notify-time-row {
+  display: flex; align-items: center; justify-content: space-between; margin-top: 10px;
+}
+.time-label { font-size: 12px; color: var(--text2); }
+.time-input {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 6px 10px; color: var(--text);
+  font-family: 'Noto Sans Thai', sans-serif; font-size: 13px;
+  outline: none; width: 100px; text-align: center;
+}
+.permission-btn {
+  width: 100%; margin-top: 10px; padding: 10px;
+  background: var(--gold-dim); border: 1px solid rgba(232,192,74,0.3);
+  border-radius: var(--radius-sm); color: var(--gold);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.toast {
+  position: absolute; top: 16px; left: 50%;
+  transform: translateX(-50%) translateY(-80px);
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 10px 16px;
+  font-size: 13px; color: var(--text); white-space: nowrap;
+  z-index: 200; transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+.fab {
+  position: absolute;
+  bottom: calc(72px + env(safe-area-inset-bottom, 0));
+  right: 16px; width: 48px; height: 48px;
+  background: var(--gold); color: #0d0d1a;
+  border-radius: 50%; border: none; font-size: 26px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  z-index: 50; transition: transform 0.15s;
+  box-shadow: 0 4px 16px rgba(232,192,74,0.4);
+}
+.fab:active { transform: scale(0.9); }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="toast" id="toast"></div>
+
+  <!-- HEADER -->
+  <div class="header" id="main-header">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <div>
+          <div class="logo-text">MFF QUEST</div>
+          <div class="logo-sub">TRACKER</div>
+        </div>
+      </div>
+      <div class="header-date" id="header-date"></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="mini-ring">
+        <svg width="40" height="40" viewBox="0 0 40 40">
+          <circle cx="20" cy="20" r="16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
+          <circle id="prog-circle" cx="20" cy="20" r="16" fill="none" stroke="#e8c04a"
+            stroke-width="4" stroke-dasharray="100.53" stroke-dashoffset="100.53"
+            stroke-linecap="round" style="transition:stroke-dashoffset 0.4s ease"/>
+        </svg>
+        <div class="mini-ring-label" id="prog-label">0/0</div>
+      </div>
+      <div class="progress-info">
+        <div class="progress-title" id="prog-title">Daily Progress</div>
+        <div class="progress-sub" id="prog-sub">ยังไม่มี Quest</div>
+        <div class="reset-badge" id="reset-badge">⏱ reset ใน --:--</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" id="main-tabs">
+    <button class="tab-btn active" id="tab-daily">Daily</button>
+    <button class="tab-btn" id="tab-weekly">Weekly</button>
+    <button class="tab-btn" id="tab-special">Special</button>
+  </div>
+
+  <!-- QUEST LIST -->
+  <div class="content" id="quest-content"></div>
+
+  <!-- NOTIFY PAGE -->
+  <div class="subpage" id="notify-page">
+    <div class="notify-card">
+      <div class="notify-title">⏰ แจ้งเตือน Daily Reset</div>
+      <div class="notify-desc">แจ้งเตือนก่อน Daily quest reset (reset เวลา 05:00 น. server time)</div>
+      <div class="notify-time-row">
+        <div class="time-label">แจ้งเตือนก่อน</div>
+        <input type="number" class="time-input" id="daily-notify-min" value="30" min="5" max="120"> นาที
+      </div>
+      <div class="notify-time-row" style="margin-top:6px">
+        <div class="time-label">เวลา reset</div>
+        <input type="time" class="time-input" id="daily-reset-time" value="05:00">
+      </div>
+    </div>
+    <div class="notify-card">
+      <div class="notify-title">📅 แจ้งเตือน Weekly Reset</div>
+      <div class="notify-desc">แจ้งเตือนก่อน Weekly quest reset ทุกสัปดาห์</div>
+      <div class="notify-time-row">
+        <div class="time-label">แจ้งเตือนก่อน</div>
+        <input type="number" class="time-input" id="weekly-notify-min" value="60" min="5" max="240"> นาที
+      </div>
+      <div class="notify-time-row" style="margin-top:6px">
+        <div class="time-label">วัน reset</div>
+        <select class="modal-select" id="weekly-reset-day" style="width:auto;padding:6px 10px;margin:0">
+          <option value="1">จันทร์</option>
+          <option value="2">อังคาร</option>
+          <option value="3">พุธ</option>
+          <option value="4">พฤหัส</option>
+          <option value="5">ศุกร์</option>
+          <option value="6">เสาร์</option>
+          <option value="0">อาทิตย์</option>
+        </select>
+      </div>
+    </div>
+    <div class="notify-card">
+      <div class="notify-title">🔔 เปิดการแจ้งเตือน</div>
+      <div class="notify-desc">อนุญาตการแจ้งเตือนเพื่อรับ reminder ก่อน reset</div>
+      <button class="permission-btn" id="notif-perm-btn">ขออนุญาตการแจ้งเตือน</button>
+      <div style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center" id="notif-status"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-ghost" id="test-notif-btn">ทดสอบแจ้งเตือน</button>
+      <button class="btn btn-primary" id="save-notify-btn">บันทึก</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS PAGE -->
+  <div class="subpage" id="settings-page">
+    <div class="settings-section">
+      <div class="settings-header">รีเซ็ต Quest</div>
+      <div class="settings-row">
+        <div><div class="settings-label">รีเซ็ต Daily</div><div class="settings-sub">เริ่มใหม่ทุก Quest ใน Daily</div></div>
+        <button class="btn btn-danger" style="flex:none;padding:6px 14px;font-size:12px" id="reset-daily-btn">รีเซ็ต</button>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">รีเซ็ต Weekly</div><div class="settings-sub">เริ่มใหม่ทุก Quest ใน Weekly</div></div>
+        <button class="btn btn-danger" style="flex:none;padding:6px 14px;font-size:12px" id="reset-weekly-btn">รีเซ็ต</button>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">รีเซ็ต Special</div><div class="settings-sub">เริ่มใหม่ทุก Quest ใน Special</div></div>
+        <button class="btn btn-danger" style="flex:none;padding:6px 14px;font-size:12px" id="reset-special-btn">รีเซ็ต</button>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-header">ข้อมูล</div>
+      <div class="settings-row">
+        <div><div class="settings-label">ล้างข้อมูลทั้งหมด</div><div class="settings-sub">ลบ Quest และ setting ทุกอย่าง</div></div>
+        <button class="btn btn-danger" style="flex:none;padding:6px 14px;font-size:12px" id="clear-all-btn">ล้าง</button>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-header">เกี่ยวกับ</div>
+      <div class="settings-row">
+        <div class="settings-label">MFF Quest Tracker</div>
+        <div style="font-size:12px;color:var(--text3)">v1.1</div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">ติดตั้งเป็น App</div><div class="settings-sub">Chrome → เมนู ⋮ → "เพิ่มลงในหน้าจอหลัก"</div></div>
+        <span style="font-size:18px">📲</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <button class="fab" id="fab-btn">+</button>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-item active" id="nav-quest"><span class="nav-icon">📋</span>Quest</button>
+    <button class="nav-item" id="nav-notify"><span class="nav-icon">🔔</span>แจ้งเตือน</button>
+    <button class="nav-item" id="nav-settings"><span class="nav-icon">⚙️</span>ตั้งค่า</button>
+  </div>
+
+  <!-- ADD/EDIT MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal-box">
+      <div class="modal-handle"></div>
+      <div class="modal-title" id="modal-title">เพิ่ม Quest ใหม่</div>
+      <input type="text" class="modal-input" id="quest-name-input" placeholder="ชื่อ Quest เช่น Villain Siege">
+      <div class="modal-row">
+        <select class="modal-select" id="quest-type-select" style="margin-bottom:0">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="special">Special</option>
+        </select>
+        <input type="text" class="modal-input" id="quest-reward-input" placeholder="รางวัล เช่น 500 Gold" style="margin-bottom:0">
+      </div>
+      <input type="text" class="modal-input" id="quest-note-input" placeholder="หมายเหตุ (ไม่จำเป็น)" style="margin-top:10px">
+      <div class="modal-row" style="margin-top:10px">
+        <button class="btn btn-ghost" id="modal-cancel-btn">ยกเลิก</button>
+        <button class="btn btn-primary" id="modal-save-btn">บันทึก</button>
+      </div>
+      <div id="delete-btn-wrap" style="display:none;margin-top:8px">
+        <button class="btn btn-danger" style="width:100%" id="modal-delete-btn">ลบ Quest นี้</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+'use strict';
+
+// ── DEFAULT DATA ──────────────────────────────────────────────────────
+var DEFAULT_QUESTS = [
+  {id:'q1',name:'Villain Siege',type:'daily',reward:'500 Gold',note:'All modes',done:false},
+  {id:'q2',name:'World Boss',type:'daily',reward:'300 Gold',note:'3 ครั้ง',done:false},
+  {id:'q3',name:'Alliance Battle',type:'daily',reward:'200 Gold',note:'',done:false},
+  {id:'q4',name:'Dimension Rift',type:'daily',reward:'400 Gold',note:'5 ครั้ง',done:false},
+  {id:'q5',name:'WBI (World Boss Invasion)',type:'daily',reward:'600 Gold',note:'',done:false},
+  {id:'q6',name:'Shadow War',type:'weekly',reward:'2000 Gold',note:'',done:false},
+  {id:'q7',name:'Alliance War',type:'weekly',reward:'1500 Gold',note:'',done:false},
+  {id:'q8',name:'Giant Boss Raid',type:'weekly',reward:'1000 Gold',note:'',done:false},
+  {id:'q9',name:'Timeline Battle',type:'weekly',reward:'800 Gold',note:'',done:false},
+  {id:'q10',name:'Battleworld',type:'special',reward:'3000 Gold',note:'Event limited',done:false},
+  {id:'q11',name:'Super Hero League',type:'special',reward:'2500 Gold',note:'',done:false},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────
+var quests = loadQuests();
+var settings = loadSettings();
+var currentTab = 'daily';
+var editingId = null;
+var countdownTimer = null;
+var toastTimer = null;
+
+function loadQuests() {
+  try {
+    var raw = localStorage.getItem('mff_quests');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  var q = DEFAULT_QUESTS.map(function(x){ return Object.assign({},x); });
+  saveQuests(q);
+  return q;
+}
+function saveQuests(q) {
+  try { localStorage.setItem('mff_quests', JSON.stringify(q)); } catch(e) {}
+}
+function loadSettings() {
+  try {
+    var raw = localStorage.getItem('mff_settings');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { dailyResetTime:'05:00', dailyNotifyMin:30, weeklyResetDay:1, weeklyNotifyMin:60 };
+}
+function saveSettings(s) {
+  try { localStorage.setItem('mff_settings', JSON.stringify(s)); } catch(e) {}
+}
+
+// ── AUTO RESET ────────────────────────────────────────────────────────
+function checkAutoReset() {
+  var now = new Date();
+  var parts = settings.dailyResetTime.split(':');
+  var rh = parseInt(parts[0]), rm = parseInt(parts[1]);
+  var resetToday = new Date(now);
+  resetToday.setHours(rh, rm, 0, 0);
+
+  var lastDaily = localStorage.getItem('mff_last_daily_reset');
+  if (now >= resetToday && (!lastDaily || new Date(lastDaily) < resetToday)) {
+    quests = quests.map(function(q){ return q.type==='daily' ? Object.assign({},q,{done:false}) : q; });
+    saveQuests(quests);
+    localStorage.setItem('mff_last_daily_reset', now.toISOString());
+  }
+
+  var dayOfWeek = now.getDay();
+  if (dayOfWeek === parseInt(settings.weeklyResetDay)) {
+    var lastWeekly = localStorage.getItem('mff_last_weekly_reset');
+    if (now >= resetToday && (!lastWeekly || new Date(lastWeekly) < resetToday)) {
+      quests = quests.map(function(q){ return q.type==='weekly' ? Object.assign({},q,{done:false}) : q; });
+      saveQuests(quests);
+      localStorage.setItem('mff_last_weekly_reset', now.toISOString());
+    }
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function updateDate() {
+  var now = new Date();
+  var days = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
+  var months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  var hh = String(now.getHours()).padStart(2,'0');
+  var mm = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('header-date').innerHTML =
+    'วัน'+days[now.getDay()]+' '+now.getDate()+' '+months[now.getMonth()]+' '+(now.getFullYear()+543)+'<br>'+
+    '<span style="color:var(--text3);font-size:11px">'+hh+':'+mm+' น.</span>';
+}
+
+function updateProgress() {
+  var tabQ = quests.filter(function(q){ return q.type===currentTab; });
+  var done = tabQ.filter(function(q){ return q.done; }).length;
+  var total = tabQ.length;
+  var pct = total ? done/total : 0;
+  var circ = 100.53;
+  document.getElementById('prog-circle').style.strokeDashoffset = (circ - pct*circ).toFixed(2);
+  document.getElementById('prog-label').textContent = done+'/'+total;
+  var labels = {daily:'Daily',weekly:'Weekly',special:'Special'};
+  document.getElementById('prog-title').textContent = labels[currentTab]+' Progress';
+  document.getElementById('prog-sub').textContent =
+    total===0 ? 'กด + เพื่อเพิ่ม Quest' :
+    done===total ? '✅ เสร็จหมดแล้ว!' :
+    'เหลืออีก '+(total-done)+' รายการ';
+}
+
+function startCountdown() {
+  if (countdownTimer) clearInterval(countdownTimer);
+  function tick() {
+    var now = new Date();
+    var parts = settings.dailyResetTime.split(':');
+    var next = new Date(now);
+    next.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+    if (next <= now) next.setDate(next.getDate()+1);
+    var diff = next - now;
+    var h = Math.floor(diff/3600000);
+    var m = Math.floor((diff%3600000)/60000);
+    var s = Math.floor((diff%60000)/1000);
+    document.getElementById('reset-badge').textContent =
+      '⏱ Daily reset ใน '+h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  }
+  tick();
+  countdownTimer = setInterval(tick, 1000);
+}
+
+function renderQuests() {
+  var container = document.getElementById('quest-content');
+  var tabQ = quests.filter(function(q){ return q.type===currentTab; });
+  var todo = tabQ.filter(function(q){ return !q.done; });
+  var done = tabQ.filter(function(q){ return q.done; });
+
+  if (tabQ.length===0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div>ยังไม่มี Quest<br>กด + เพื่อเพิ่มรายการ</div></div>';
+    return;
+  }
+
+  var html = '';
+  if (todo.length>0) {
+    html += '<div class="section-label">ยังไม่ได้ทำ ('+todo.length+')</div>';
+    todo.forEach(function(q){ html += cardHTML(q); });
+  }
+  if (done.length>0) {
+    html += '<div class="section-label" style="margin-top:8px">เสร็จแล้ว ('+done.length+')</div>';
+    done.forEach(function(q){ html += cardHTML(q); });
+  }
+  container.innerHTML = html;
+
+  // attach events after render
+  container.querySelectorAll('.quest-card').forEach(function(el) {
+    var id = el.dataset.id;
+    el.addEventListener('click', function(){ toggleQuest(id); });
+  });
+  container.querySelectorAll('.edit-btn').forEach(function(el) {
+    var id = el.dataset.id;
+    el.addEventListener('click', function(e){ e.stopPropagation(); openEditModal(id); });
+  });
+}
+
+function cardHTML(q) {
+  var bc = {daily:'badge-daily',weekly:'badge-weekly',special:'badge-special'}[q.type];
+  var bt = {daily:'Daily',weekly:'Weekly',special:'Special'}[q.type];
+  var check = q.done
+    ? '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    : '';
+  return '<div class="quest-card'+(q.done?' done':'')+'" data-id="'+q.id+'">'
+    +'<div class="checkbox'+(q.done?' checked':'')+'">'+check+'</div>'
+    +'<div class="quest-body">'
+      +'<div class="quest-name'+(q.done?' done':'')+'">'+escHtml(q.name)+'</div>'
+      +'<div class="quest-meta">'
+        +'<span class="quest-type-badge '+bc+'">'+bt+'</span>'
+        +(q.note ? '<span class="quest-tag">'+escHtml(q.note)+'</span>' : '')
+      +'</div>'
+    +'</div>'
+    +(q.reward ? '<div class="quest-reward">🏅 '+escHtml(q.reward)+'</div>' : '')
+    +'<div class="edit-btn" data-id="'+q.id+'">✏️</div>'
+  +'</div>';
+}
+
+function refresh() {
+  updateDate();
+  updateProgress();
+  renderQuests();
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  ['daily','weekly','special'].forEach(function(t){
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+  });
+  refresh();
+}
+
+function toggleQuest(id) {
+  var q = quests.find(function(x){ return x.id===id; });
+  if (!q) return;
+  q.done = !q.done;
+  saveQuests(quests);
+  if (q.done) showToast('✅ '+q.name+' — เสร็จแล้ว!');
+  refresh();
+}
+
+function showPage(page) {
+  var isQuest = page==='quest';
+  document.getElementById('quest-content').style.display = isQuest ? '' : 'none';
+  document.getElementById('main-tabs').style.display = isQuest ? '' : 'none';
+  document.getElementById('fab-btn').style.display = isQuest ? '' : 'none';
+  document.getElementById('notify-page').classList.toggle('show', page==='notify');
+  document.getElementById('settings-page').classList.toggle('show', page==='settings');
+  ['quest','notify','settings'].forEach(function(p){
+    document.getElementById('nav-'+p).classList.toggle('active', p===page);
+  });
+  if (page==='notify') loadNotifyUI();
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────
+function openAddModal() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'เพิ่ม Quest ใหม่';
+  document.getElementById('quest-name-input').value = '';
+  document.getElementById('quest-reward-input').value = '';
+  document.getElementById('quest-note-input').value = '';
+  document.getElementById('quest-type-select').value = currentTab;
+  document.getElementById('delete-btn-wrap').style.display = 'none';
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('quest-name-input').focus(); }, 350);
+}
+
+function openEditModal(id) {
+  var q = quests.find(function(x){ return x.id===id; });
+  if (!q) return;
+  editingId = id;
+  document.getElementById('modal-title').textContent = 'แก้ไข Quest';
+  document.getElementById('quest-name-input').value = q.name;
+  document.getElementById('quest-reward-input').value = q.reward;
+  document.getElementById('quest-note-input').value = q.note;
+  document.getElementById('quest-type-select').value = q.type;
+  document.getElementById('delete-btn-wrap').style.display = '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function saveQuest() {
+  var name = document.getElementById('quest-name-input').value.trim();
+  if (!name) { showToast('⚠️ กรุณาใส่ชื่อ Quest'); return; }
+  var type   = document.getElementById('quest-type-select').value;
+  var reward = document.getElementById('quest-reward-input').value.trim();
+  var note   = document.getElementById('quest-note-input').value.trim();
+  if (editingId) {
+    var q = quests.find(function(x){ return x.id===editingId; });
+    if (q) { q.name=name; q.type=type; q.reward=reward; q.note=note; }
+  } else {
+    quests.push({id:'q'+Date.now(), name:name, type:type, reward:reward, note:note, done:false});
+    switchTab(type);
+  }
+  saveQuests(quests);
+  closeModal();
+  refresh();
+  showToast(editingId ? '✏️ แก้ไขแล้ว' : '➕ เพิ่ม Quest แล้ว');
+}
+
+function deleteQuest() {
+  if (!editingId) return;
+  quests = quests.filter(function(q){ return q.id!==editingId; });
+  saveQuests(quests);
+  closeModal();
+  refresh();
+  showToast('🗑️ ลบ Quest แล้ว');
+}
+
+function resetTab(tab) {
+  if (!confirm('รีเซ็ต Quest ใน '+tab+' ทั้งหมดใช่ไหม?')) return;
+  quests = quests.map(function(q){ return q.type===tab ? Object.assign({},q,{done:false}) : q; });
+  saveQuests(quests);
+  if (currentTab===tab) refresh();
+  showToast('🔄 รีเซ็ต '+tab+' แล้ว');
+}
+
+function clearAll() {
+  if (!confirm('ลบข้อมูลทั้งหมดใช่ไหม? (ไม่สามารถย้อนกลับได้)')) return;
+  localStorage.clear();
+  quests = loadQuests();
+  settings = loadSettings();
+  refresh();
+  showToast('🗑️ ล้างข้อมูลทั้งหมดแล้ว');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2500);
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────────────
+function loadNotifyUI() {
+  document.getElementById('daily-notify-min').value = settings.dailyNotifyMin;
+  document.getElementById('daily-reset-time').value  = settings.dailyResetTime;
+  document.getElementById('weekly-notify-min').value = settings.weeklyNotifyMin;
+  document.getElementById('weekly-reset-day').value  = settings.weeklyResetDay;
+  updateNotifStatus();
+}
+
+function updateNotifStatus() {
+  var el = document.getElementById('notif-status');
+  if (!('Notification' in window)) {
+    el.textContent = '❌ เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน';
+  } else if (Notification.permission==='granted') {
+    el.textContent = '✅ เปิดการแจ้งเตือนแล้ว';
+    el.style.color = 'var(--green)';
+  } else if (Notification.permission==='denied') {
+    el.textContent = '❌ ถูกปฏิเสธ — เปิดในการตั้งค่าเบราว์เซอร์';
+    el.style.color = 'var(--red)';
+  } else {
+    el.textContent = '⏳ ยังไม่ได้อนุญาต';
+    el.style.color = '';
+  }
+}
+
+// ── EVENT LISTENERS ───────────────────────────────────────────────────
+document.getElementById('tab-daily').addEventListener('click',   function(){ switchTab('daily'); });
+document.getElementById('tab-weekly').addEventListener('click',  function(){ switchTab('weekly'); });
+document.getElementById('tab-special').addEventListener('click', function(){ switchTab('special'); });
+
+document.getElementById('nav-quest').addEventListener('click',    function(){ showPage('quest'); });
+document.getElementById('nav-notify').addEventListener('click',   function(){ showPage('notify'); });
+document.getElementById('nav-settings').addEventListener('click', function(){ showPage('settings'); });
+
+document.getElementById('fab-btn').addEventListener('click', openAddModal);
+
+document.getElementById('modal-overlay').addEventListener('click', function(e){
+  if (e.target===document.getElementById('modal-overlay')) closeModal();
+});
+document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
+document.getElementById('modal-save-btn').addEventListener('click', saveQuest);
+document.getElementById('modal-delete-btn').addEventListener('click', deleteQuest);
+
+document.getElementById('reset-daily-btn').addEventListener('click',   function(){ resetTab('daily'); });
+document.getElementById('reset-weekly-btn').addEventListener('click',  function(){ resetTab('weekly'); });
+document.getElementById('reset-special-btn').addEventListener('click', function(){ resetTab('special'); });
+document.getElementById('clear-all-btn').addEventListener('click', clearAll);
+
+document.getElementById('notif-perm-btn').addEventListener('click', function(){
+  if (!('Notification' in window)) { showToast('❌ ไม่รองรับ'); return; }
+  Notification.requestPermission().then(function(p){
+    if (p==='granted') { showToast('✅ เปิดการแจ้งเตือนสำเร็จ!'); }
+    else { showToast('❌ ไม่ได้รับอนุญาต'); }
+    updateNotifStatus();
+  });
+});
+
+document.getElementById('test-notif-btn').addEventListener('click', function(){
+  if (Notification.permission!=='granted') { showToast('⚠️ อนุญาตการแจ้งเตือนก่อน'); return; }
+  new Notification('MFF Quest Tracker ⚡', { body:'⏰ ทดสอบแจ้งเตือน — Daily reset ใกล้แล้ว!' });
+});
+
+document.getElementById('save-notify-btn').addEventListener('click', function(){
+  settings.dailyNotifyMin  = parseInt(document.getElementById('daily-notify-min').value);
+  settings.dailyResetTime  = document.getElementById('daily-reset-time').value;
+  settings.weeklyNotifyMin = parseInt(document.getElementById('weekly-notify-min').value);
+  settings.weeklyResetDay  = parseInt(document.getElementById('weekly-reset-day').value);
+  saveSettings(settings);
+  startCountdown();
+  showToast('💾 บันทึกการตั้งค่าแล้ว');
+});
+
+document.addEventListener('keydown', function(e){
+  if (!document.getElementById('modal-overlay').classList.contains('open')) return;
+  if (e.key==='Enter') saveQuest();
+  if (e.key==='Escape') closeModal();
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────
+checkAutoReset();
+refresh();
+startCountdown();
+setInterval(updateDate, 30000);
+
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(() => console.log('Service Worker Registered'))
+      .catch(err => console.log('SW registration failed:', err));
+  });
+}
+</script>
+
+</body>
+</html>
