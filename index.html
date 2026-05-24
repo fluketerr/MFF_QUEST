@@ -8,311 +8,116 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MFF Quest">
 <title>MFF Quest Tracker</title>
-
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#0d0d1a">
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap');
-
 :root {
-  --bg: #0d0d1a;
-  --bg2: #13132a;
-  --bg3: #1a1a35;
-  --bg4: #22224a;
-  --gold: #e8c04a;
-  --gold2: #f5d878;
-  --gold-dim: rgba(232,192,74,0.15);
-  --green: #3ecf8e;
-  --green-dim: rgba(62,207,142,0.15);
-  --red: #ff5f5f;
-  --red-dim: rgba(255,95,95,0.12);
-  --blue: #5b8dee;
-  --blue-dim: rgba(91,141,238,0.15);
-  --purple: #a78bfa;
-  --purple-dim: rgba(167,139,250,0.15);
-  --text: #e8e8f0;
-  --text2: #9090b0;
-  --text3: #5a5a80;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.14);
-  --radius: 12px;
-  --radius-sm: 8px;
+  --bg:#0d0d1a;--bg2:#13132a;--bg3:#1a1a35;--gold:#e8c04a;--gold-dim:rgba(232,192,74,0.15);
+  --green:#3ecf8e;--red:#ff5f5f;--red-dim:rgba(255,95,95,0.12);
+  --blue:#5b8dee;--blue-dim:rgba(91,141,238,0.15);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.15);
+  --text:#e8e8f0;--text2:#9090b0;--text3:#5a5a80;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --radius:12px;--radius-sm:8px;
 }
-
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-html, body {
-  height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Noto Sans Thai', sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  overscroll-behavior: none;
-}
-
-.app {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-  max-width: 480px;
-  margin: 0 auto;
-  position: relative;
-  overflow: hidden;
-}
-
-.header {
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  padding: 14px 16px 10px;
-  flex-shrink: 0;
-}
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.logo { display: flex; align-items: center; gap: 8px; }
-.logo-icon {
-  width: 32px; height: 32px;
-  background: var(--gold-dim);
-  border: 1px solid rgba(232,192,74,0.4);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-}
-.logo-text {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 18px; font-weight: 700; color: var(--gold); letter-spacing: 0.5px;
-}
-.logo-sub { font-size: 10px; color: var(--text3); letter-spacing: 0.5px; }
-.header-date { font-size: 12px; color: var(--text2); text-align: right; }
-
-.progress-bar-wrap {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 8px 12px;
-}
-.mini-ring { position: relative; width: 40px; height: 40px; flex-shrink: 0; }
-.mini-ring svg { transform: rotate(-90deg); }
-.mini-ring-label {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 12px; font-weight: 700; color: var(--gold);
-}
-.progress-info { flex: 1; min-width: 0; }
-.progress-title { font-size: 12px; font-weight: 600; color: var(--text); }
-.progress-sub { font-size: 11px; color: var(--text2); }
-.reset-badge {
-  font-size: 10px; background: var(--gold-dim); color: var(--gold);
-  border: 1px solid rgba(232,192,74,0.3); border-radius: 20px;
-  padding: 2px 8px; display: inline-flex; align-items: center; gap: 4px;
-  margin-top: 3px; white-space: nowrap;
-}
-
-.tabs {
-  display: flex; background: var(--bg2);
-  border-bottom: 1px solid var(--border); flex-shrink: 0;
-}
-.tab-btn {
-  flex: 1; padding: 10px 0; font-size: 12px; font-weight: 600;
-  color: var(--text3); background: none; border: none;
-  border-bottom: 2px solid transparent; cursor: pointer;
-  transition: color 0.2s, border-color 0.2s; letter-spacing: 0.3px;
-}
-.tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
-
-.content {
-  flex: 1; overflow-y: auto; padding: 12px;
-  -webkit-overflow-scrolling: touch;
-}
-.content::-webkit-scrollbar { display: none; }
-
-.section-label {
-  font-size: 10px; font-weight: 600; color: var(--text3);
-  letter-spacing: 1px; text-transform: uppercase; padding: 4px 2px 6px;
-}
-
-.quest-card {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 6px;
-  display: flex; align-items: center; gap: 10px; cursor: pointer;
-  transition: opacity 0.2s; user-select: none;
-}
-.quest-card:active { transform: scale(0.98); }
-.quest-card.done { opacity: 0.45; }
-.quest-card.done .quest-name { text-decoration: line-through; color: var(--text3); }
-
-.checkbox {
-  width: 22px; height: 22px; border-radius: 50%;
-  border: 1.5px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; font-size: 12px; transition: all 0.2s;
-}
-.checkbox.checked { background: var(--green); border-color: var(--green); color: #0d0d1a; }
-
-.quest-body { flex: 1; min-width: 0; }
-.quest-name {
-  font-size: 13px; font-weight: 600; color: var(--text);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.quest-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
-.quest-tag { font-size: 10px; color: var(--text3); }
-.quest-type-badge {
-  font-size: 9px; padding: 1px 6px; border-radius: 20px;
-  font-weight: 600; letter-spacing: 0.3px;
-}
-.badge-daily  { background: var(--blue-dim);   color: var(--blue); }
-.badge-weekly { background: var(--purple-dim); color: var(--purple); }
-.badge-special{ background: var(--gold-dim);   color: var(--gold); }
-.quest-reward {
-  font-family: 'Rajdhani', sans-serif; font-size: 13px;
-  font-weight: 700; color: var(--gold); white-space: nowrap;
-}
-.edit-btn { padding: 4px; color: var(--text3); font-size: 16px; cursor: pointer; flex-shrink:0; }
-
-.empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
-.empty-icon { font-size: 40px; margin-bottom: 12px; }
-
-.bottom-nav {
-  background: var(--bg2); border-top: 1px solid var(--border);
-  display: flex; flex-shrink: 0;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
-.nav-item {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  padding: 8px 0; cursor: pointer; color: var(--text3);
-  transition: color 0.15s; font-size: 10px; gap: 3px;
-  border: none; background: none;
-}
-.nav-item.active { color: var(--gold); }
-.nav-icon { font-size: 20px; }
-
-.modal-overlay {
-  position: absolute; inset: 0; background: rgba(0,0,0,0.7);
-  display: flex; align-items: flex-end;
-  opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 100;
-}
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal {
-  background: var(--bg2); border-top: 1px solid var(--border2);
-  border-radius: 20px 20px 0 0; width: 100%; padding: 20px 16px;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
-  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
-}
-.modal-overlay.open .modal { transform: translateY(0); }
-.modal-handle {
-  width: 36px; height: 4px; background: var(--border2);
-  border-radius: 2px; margin: 0 auto 16px;
-}
-.modal-title {
-  font-family: 'Rajdhani', sans-serif; font-size: 18px;
-  font-weight: 700; color: var(--gold); margin-bottom: 16px;
-}
-.modal-input {
-  width: 100%; background: var(--bg3); border: 1px solid var(--border2);
-  border-radius: var(--radius-sm); padding: 10px 12px; color: var(--text);
-  font-family: 'Noto Sans Thai', sans-serif; font-size: 14px;
-  margin-bottom: 10px; outline: none;
-}
-.modal-input:focus { border-color: var(--gold); }
-.modal-select {
-  width: 100%; background: var(--bg3); border: 1px solid var(--border2);
-  border-radius: var(--radius-sm); padding: 10px 12px; color: var(--text);
-  font-family: 'Noto Sans Thai', sans-serif; font-size: 14px;
-  margin-bottom: 10px; outline: none; -webkit-appearance: none;
-}
-.modal-row { display: flex; gap: 8px; }
-.btn {
-  flex: 1; padding: 12px; border-radius: var(--radius-sm);
-  font-size: 14px; font-weight: 600; cursor: pointer; border: none;
-  font-family: 'Noto Sans Thai', sans-serif; transition: opacity 0.15s;
-}
-.btn:active { opacity: 0.8; }
-.btn-primary { background: var(--gold); color: #0d0d1a; }
-.btn-ghost { background: var(--bg3); color: var(--text2); border: 1px solid var(--border2); }
-.btn-danger { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,95,95,0.3); }
-
-.subpage {
-  display: none; flex-direction: column; flex: 1;
-  overflow-y: auto; padding: 12px;
-}
-.subpage.show { display: flex; }
-
-.settings-section {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--radius); margin-bottom: 12px; overflow: hidden;
-}
-.settings-header {
-  padding: 10px 14px; font-size: 11px; font-weight: 600;
-  color: var(--text3); letter-spacing: 0.8px; text-transform: uppercase;
-  border-bottom: 1px solid var(--border);
-}
-.settings-row {
-  display: flex; align-items: center; padding: 12px 14px;
-  border-bottom: 1px solid var(--border);
-}
-.settings-row:last-child { border-bottom: none; }
-.settings-label { flex: 1; font-size: 13px; color: var(--text); }
-.settings-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
-
-.notify-card {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
-}
-.notify-title {
-  font-family: 'Rajdhani', sans-serif; font-size: 16px;
-  font-weight: 700; color: var(--gold); margin-bottom: 4px;
-}
-.notify-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
-.notify-time-row {
-  display: flex; align-items: center; justify-content: space-between; margin-top: 10px;
-}
-.time-label { font-size: 12px; color: var(--text2); }
-.time-input {
-  background: var(--bg3); border: 1px solid var(--border2);
-  border-radius: var(--radius-sm); padding: 6px 10px; color: var(--text);
-  font-family: 'Noto Sans Thai', sans-serif; font-size: 13px;
-  outline: none; width: 100px; text-align: center;
-}
-.permission-btn {
-  width: 100%; margin-top: 10px; padding: 10px;
-  background: var(--gold-dim); border: 1px solid rgba(232,192,74,0.3);
-  border-radius: var(--radius-sm); color: var(--gold);
-  font-size: 13px; font-weight: 600; cursor: pointer;
-  font-family: 'Noto Sans Thai', sans-serif;
-}
-
-.toast {
-  position: absolute; top: 16px; left: 50%;
-  transform: translateX(-50%) translateY(-80px);
-  background: var(--bg3); border: 1px solid var(--border2);
-  border-radius: var(--radius-sm); padding: 10px 16px;
-  font-size: 13px; color: var(--text); white-space: nowrap;
-  z-index: 200; transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-.fab {
-  position: absolute;
-  bottom: calc(72px + env(safe-area-inset-bottom, 0));
-  right: 16px; width: 48px; height: 48px;
-  background: var(--gold); color: #0d0d1a;
-  border-radius: 50%; border: none; font-size: 26px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  z-index: 50; transition: transform 0.15s;
-  box-shadow: 0 4px 16px rgba(232,192,74,0.4);
-}
-.fab:active { transform: scale(0.9); }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai',sans-serif;font-size:14px;line-height:1.5;overscroll-behavior:none}
+.app{display:flex;flex-direction:column;height:100dvh;max-width:480px;margin:0 auto;position:relative;overflow:hidden}
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 16px 10px;flex-shrink:0}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-icon{width:32px;height:32px;background:var(--gold-dim);border:1px solid rgba(232,192,74,0.4);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-text{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--gold);letter-spacing:.5px}
+.logo-sub{font-size:10px;color:var(--text3);letter-spacing:.5px}
+.header-date{font-size:12px;color:var(--text2);text-align:right}
+.progress-bar-wrap{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px}
+.mini-ring{position:relative;width:40px;height:40px;flex-shrink:0}
+.mini-ring svg{transform:rotate(-90deg)}
+.mini-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--gold)}
+.progress-info{flex:1;min-width:0}
+.progress-title{font-size:12px;font-weight:600;color:var(--text)}
+.progress-sub{font-size:11px;color:var(--text2)}
+.reset-badge{font-size:10px;background:var(--gold-dim);color:var(--gold);border:1px solid rgba(232,192,74,0.3);border-radius:20px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px;margin-top:3px;white-space:nowrap}
+.sync-badge{font-size:10px;border-radius:20px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px;margin-top:3px;white-space:nowrap}
+.sync-ok{background:rgba(62,207,142,0.15);color:var(--green);border:1px solid rgba(62,207,142,0.3)}
+.sync-err{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,95,95,0.3)}
+.sync-ing{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(232,192,74,0.3)}
+.tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+.tab-btn{flex:1;padding:10px 0;font-size:12px;font-weight:600;color:var(--text3);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s;letter-spacing:.3px}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.content{flex:1;overflow-y:auto;padding:12px;-webkit-overflow-scrolling:touch}
+.content::-webkit-scrollbar{display:none}
+.section-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase;padding:4px 2px 6px}
+.quest-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:opacity .2s;user-select:none}
+.quest-card:active{transform:scale(.98)}
+.quest-card.done{opacity:.45}
+.quest-card.done .quest-name{text-decoration:line-through;color:var(--text3)}
+.checkbox{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;transition:all .2s}
+.checkbox.checked{background:var(--green);border-color:var(--green);color:#0d0d1a}
+.quest-body{flex:1;min-width:0}
+.quest-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.quest-meta{display:flex;align-items:center;gap:6px;margin-top:2px}
+.quest-tag{font-size:10px;color:var(--text3)}
+.quest-type-badge{font-size:9px;padding:1px 6px;border-radius:20px;font-weight:600;letter-spacing:.3px}
+.badge-daily{background:var(--blue-dim);color:var(--blue)}
+.badge-weekly{background:var(--purple-dim);color:var(--purple)}
+.badge-special{background:var(--gold-dim);color:var(--gold)}
+.quest-reward{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--gold);white-space:nowrap}
+.edit-btn{padding:4px;color:var(--text3);font-size:16px;cursor:pointer;flex-shrink:0}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-icon{font-size:40px;margin-bottom:12px}
+.bottom-nav{background:var(--bg2);border-top:1px solid var(--border);display:flex;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0;cursor:pointer;color:var(--text3);transition:color .15s;font-size:10px;gap:3px;border:none;background:none}
+.nav-item.active{color:var(--gold)}
+.nav-icon{font-size:20px}
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s;z-index:100}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border-top:1px solid var(--border2);border-radius:20px 20px 0 0;width:100%;padding:20px 16px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);padding-bottom:calc(20px + env(safe-area-inset-bottom,0))}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
+.modal-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:16px}
+.modal-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-family:'Noto Sans Thai',sans-serif;font-size:14px;margin-bottom:10px;outline:none}
+.modal-input:focus{border-color:var(--gold)}
+.modal-select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-family:'Noto Sans Thai',sans-serif;font-size:14px;margin-bottom:10px;outline:none;-webkit-appearance:none}
+.modal-row{display:flex;gap:8px}
+.btn{flex:1;padding:12px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:'Noto Sans Thai',sans-serif;transition:opacity .15s}
+.btn:active{opacity:.8}
+.btn-primary{background:var(--gold);color:#0d0d1a}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,95,95,0.3)}
+.subpage{display:none;flex-direction:column;flex:1;overflow-y:auto;padding:12px}
+.subpage.show{display:flex}
+.settings-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.settings-header{padding:10px 14px;font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.settings-row{display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-label{flex:1;font-size:13px;color:var(--text)}
+.settings-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.notify-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.notify-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:4px}
+.notify-desc{font-size:12px;color:var(--text2);line-height:1.6}
+.notify-time-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.time-label{font-size:12px;color:var(--text2)}
+.time-input{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px 10px;color:var(--text);font-family:'Noto Sans Thai',sans-serif;font-size:13px;outline:none;width:100px;text-align:center}
+.permission-btn{width:100%;margin-top:10px;padding:10px;background:var(--gold-dim);border:1px solid rgba(232,192,74,0.3);border-radius:var(--radius-sm);color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans Thai',sans-serif}
+.toast{position:absolute;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 16px;font-size:13px;color:var(--text);white-space:nowrap;z-index:200;transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.fab{position:absolute;bottom:calc(72px + env(safe-area-inset-bottom,0));right:16px;width:48px;height:48px;background:var(--gold);color:#0d0d1a;border-radius:50%;border:none;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:50;transition:transform .15s;box-shadow:0 4px 16px rgba(232,192,74,0.4)}
+.fab:active{transform:scale(.9)}
+/* Loading overlay */
+.loading-overlay{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:300}
+.loading-overlay.hide{display:none}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--text2)}
 </style>
 </head>
 <body>
 <div class="app" id="app">
+
+  <!-- LOADING -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">กำลังโหลดข้อมูล...</div>
+  </div>
 
   <div class="toast" id="toast"></div>
 
@@ -334,14 +139,17 @@ html, body {
           <circle cx="20" cy="20" r="16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
           <circle id="prog-circle" cx="20" cy="20" r="16" fill="none" stroke="#e8c04a"
             stroke-width="4" stroke-dasharray="100.53" stroke-dashoffset="100.53"
-            stroke-linecap="round" style="transition:stroke-dashoffset 0.4s ease"/>
+            stroke-linecap="round" style="transition:stroke-dashoffset .4s ease"/>
         </svg>
         <div class="mini-ring-label" id="prog-label">0/0</div>
       </div>
       <div class="progress-info">
         <div class="progress-title" id="prog-title">Daily Progress</div>
-        <div class="progress-sub" id="prog-sub">ยังไม่มี Quest</div>
-        <div class="reset-badge" id="reset-badge">⏱ reset ใน --:--</div>
+        <div class="progress-sub" id="prog-sub">กำลังโหลด...</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <div class="reset-badge" id="reset-badge">⏱ reset ใน --:--</div>
+          <div class="sync-badge sync-ing" id="sync-badge">☁️ กำลัง sync...</div>
+        </div>
       </div>
     </div>
   </div>
@@ -360,7 +168,7 @@ html, body {
   <div class="subpage" id="notify-page">
     <div class="notify-card">
       <div class="notify-title">⏰ แจ้งเตือน Daily Reset</div>
-      <div class="notify-desc">แจ้งเตือนก่อน Daily quest reset (reset เวลา 05:00 น. server time)</div>
+      <div class="notify-desc">แจ้งเตือนก่อน Daily quest reset (reset เวลา 05:00 น. เวลาไทย)</div>
       <div class="notify-time-row">
         <div class="time-label">แจ้งเตือนก่อน</div>
         <input type="number" class="time-input" id="daily-notify-min" value="30" min="5" max="120"> นาที
@@ -380,12 +188,9 @@ html, body {
       <div class="notify-time-row" style="margin-top:6px">
         <div class="time-label">วัน reset</div>
         <select class="modal-select" id="weekly-reset-day" style="width:auto;padding:6px 10px;margin:0">
-          <option value="1">จันทร์</option>
-          <option value="2">อังคาร</option>
-          <option value="3">พุธ</option>
-          <option value="4">พฤหัส</option>
-          <option value="5">ศุกร์</option>
-          <option value="6">เสาร์</option>
+          <option value="1">จันทร์</option><option value="2">อังคาร</option>
+          <option value="3">พุธ</option><option value="4">พฤหัส</option>
+          <option value="5">ศุกร์</option><option value="6">เสาร์</option>
           <option value="0">อาทิตย์</option>
         </select>
       </div>
@@ -404,6 +209,12 @@ html, body {
 
   <!-- SETTINGS PAGE -->
   <div class="subpage" id="settings-page">
+    <div class="settings-section">
+      <div class="settings-header">☁️ Firebase Sync</div>
+      <div class="settings-row">
+        <div><div class="settings-label" id="fb-status-label">กำลังเชื่อมต่อ...</div><div class="settings-sub" id="fb-status-sub">ข้อมูลจะ sync ทันทีที่แก้ไข</div></div>
+      </div>
+    </div>
     <div class="settings-section">
       <div class="settings-header">รีเซ็ต Quest</div>
       <div class="settings-row">
@@ -430,7 +241,7 @@ html, body {
       <div class="settings-header">เกี่ยวกับ</div>
       <div class="settings-row">
         <div class="settings-label">MFF Quest Tracker</div>
-        <div style="font-size:12px;color:var(--text3)">v1.1</div>
+        <div style="font-size:12px;color:var(--text3)">v2.0 Firebase</div>
       </div>
       <div class="settings-row">
         <div><div class="settings-label">ติดตั้งเป็น App</div><div class="settings-sub">Chrome → เมนู ⋮ → "เพิ่มลงในหน้าจอหลัก"</div></div>
@@ -449,9 +260,9 @@ html, body {
     <button class="nav-item" id="nav-settings"><span class="nav-icon">⚙️</span>ตั้งค่า</button>
   </div>
 
-  <!-- ADD/EDIT MODAL -->
+  <!-- MODAL -->
   <div class="modal-overlay" id="modal-overlay">
-    <div class="modal" id="modal-box">
+    <div class="modal">
       <div class="modal-handle"></div>
       <div class="modal-title" id="modal-title">เพิ่ม Quest ใหม่</div>
       <input type="text" class="modal-input" id="quest-name-input" placeholder="ชื่อ Quest เช่น Villain Siege">
@@ -476,12 +287,34 @@ html, body {
 
 </div>
 
-<script>
-(function() {
-'use strict';
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, onSnapshot, collection, deleteDoc
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+// ── FIREBASE CONFIG ───────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyDQh9LUe6urmSiE1tAyR10novUfGwgm9Ck",
+  authDomain: "mff-quest.firebaseapp.com",
+  projectId: "mff-quest",
+  storageBucket: "mff-quest.firebasestorage.app",
+  messagingSenderId: "835391445822",
+  appId: "1:835391445822:web:538ab26a5f7be5799eea6f"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+
+// ── FIRESTORE PATHS ───────────────────────────────────────────────────
+// ใช้ user id ตายตัว (แอปส่วนตัว ไม่มี auth)
+const USER_ID = 'fluke_ysp';
+const questsDocRef  = doc(db, 'users', USER_ID, 'data', 'quests');
+const settingsDocRef = doc(db, 'users', USER_ID, 'data', 'settings');
+const resetDocRef    = doc(db, 'users', USER_ID, 'data', 'resetLog');
 
 // ── DEFAULT DATA ──────────────────────────────────────────────────────
-var DEFAULT_QUESTS = [
+const DEFAULT_QUESTS = [
   {id:'q1',name:'Villain Siege',type:'daily',reward:'500 Gold',note:'All modes',done:false},
   {id:'q2',name:'World Boss',type:'daily',reward:'300 Gold',note:'3 ครั้ง',done:false},
   {id:'q3',name:'Alliance Battle',type:'daily',reward:'200 Gold',note:'',done:false},
@@ -494,61 +327,109 @@ var DEFAULT_QUESTS = [
   {id:'q10',name:'Battleworld',type:'special',reward:'3000 Gold',note:'Event limited',done:false},
   {id:'q11',name:'Super Hero League',type:'special',reward:'2500 Gold',note:'',done:false},
 ];
+const DEFAULT_SETTINGS = {
+  dailyResetTime:'05:00', dailyNotifyMin:30, weeklyResetDay:1, weeklyNotifyMin:60
+};
 
 // ── STATE ─────────────────────────────────────────────────────────────
-var quests = loadQuests();
-var settings = loadSettings();
-var currentTab = 'daily';
-var editingId = null;
-var countdownTimer = null;
-var toastTimer = null;
+let quests = [];
+let settings = { ...DEFAULT_SETTINGS };
+let currentTab = 'daily';
+let editingId = null;
+let countdownTimer = null;
+let toastTimer = null;
+let isSaving = false;
 
-function loadQuests() {
+// ── SYNC STATUS ───────────────────────────────────────────────────────
+function setSyncStatus(state, msg) {
+  const el = document.getElementById('sync-badge');
+  el.className = 'sync-badge';
+  if (state === 'ok')  { el.classList.add('sync-ok');  el.textContent = '☁️ ' + msg; }
+  if (state === 'err') { el.classList.add('sync-err'); el.textContent = '⚠️ ' + msg; }
+  if (state === 'ing') { el.classList.add('sync-ing'); el.textContent = '🔄 ' + msg; }
+
+  const lbl = document.getElementById('fb-status-label');
+  const sub = document.getElementById('fb-status-sub');
+  if (lbl) lbl.textContent = state === 'ok' ? '✅ เชื่อมต่อ Firebase แล้ว' : state === 'err' ? '❌ ออฟไลน์ / เชื่อมต่อไม่ได้' : '🔄 กำลัง sync...';
+  if (sub) sub.textContent = state === 'ok' ? 'sync ล่าสุด: ' + new Date().toLocaleTimeString('th-TH') : 'ข้อมูลจะ sync ทันทีที่แก้ไข';
+}
+
+// ── FIRESTORE SAVE ────────────────────────────────────────────────────
+async function saveQuestsToCloud(q) {
+  isSaving = true;
+  setSyncStatus('ing', 'กำลัง sync...');
   try {
-    var raw = localStorage.getItem('mff_quests');
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
-  var q = DEFAULT_QUESTS.map(function(x){ return Object.assign({},x); });
-  saveQuests(q);
-  return q;
+    await setDoc(questsDocRef, { list: q });
+    setSyncStatus('ok', 'sync แล้ว');
+  } catch(e) {
+    console.error('saveQuests error', e);
+    setSyncStatus('err', 'sync ไม่ได้');
+    // fallback localStorage
+    try { localStorage.setItem('mff_quests_backup', JSON.stringify(q)); } catch(_) {}
+  }
+  isSaving = false;
 }
-function saveQuests(q) {
-  try { localStorage.setItem('mff_quests', JSON.stringify(q)); } catch(e) {}
-}
-function loadSettings() {
+
+async function saveSettingsToCloud(s) {
   try {
-    var raw = localStorage.getItem('mff_settings');
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
-  return { dailyResetTime:'05:00', dailyNotifyMin:30, weeklyResetDay:1, weeklyNotifyMin:60 };
+    await setDoc(settingsDocRef, s);
+  } catch(e) {
+    console.error('saveSettings error', e);
+    try { localStorage.setItem('mff_settings', JSON.stringify(s)); } catch(_) {}
+  }
 }
-function saveSettings(s) {
-  try { localStorage.setItem('mff_settings', JSON.stringify(s)); } catch(e) {}
+
+async function saveResetLog(log) {
+  try { await setDoc(resetDocRef, log); } catch(e) { console.error(e); }
+}
+
+async function loadResetLog() {
+  try {
+    const snap = await getDoc(resetDocRef);
+    return snap.exists() ? snap.data() : {};
+  } catch(e) { return {}; }
 }
 
 // ── AUTO RESET ────────────────────────────────────────────────────────
-function checkAutoReset() {
-  var now = new Date();
-  var parts = settings.dailyResetTime.split(':');
-  var rh = parseInt(parts[0]), rm = parseInt(parts[1]);
-  var resetToday = new Date(now);
-  resetToday.setHours(rh, rm, 0, 0);
+function getLastResetDate(resetTimeStr) {
+  const [rh, rm] = resetTimeStr.split(':').map(Number);
+  const now = new Date();
+  const d = new Date(now);
+  d.setHours(rh, rm, 0, 0);
+  if (d > now) d.setDate(d.getDate() - 1);
+  return d;
+}
 
-  var lastDaily = localStorage.getItem('mff_last_daily_reset');
-  if (now >= resetToday && (!lastDaily || new Date(lastDaily) < resetToday)) {
-    quests = quests.map(function(q){ return q.type==='daily' ? Object.assign({},q,{done:false}) : q; });
-    saveQuests(quests);
-    localStorage.setItem('mff_last_daily_reset', now.toISOString());
+async function checkAutoReset() {
+  const now = new Date();
+  const lastResetTime = getLastResetDate(settings.dailyResetTime);
+  const log = await loadResetLog();
+
+  // Daily
+  const lastDaily = log.lastDailyReset ? new Date(log.lastDailyReset) : null;
+  if (!lastDaily || lastDaily < lastResetTime) {
+    quests = quests.map(q => q.type === 'daily' ? { ...q, done: false } : q);
+    log.lastDailyReset = now.toISOString();
+    await saveQuestsToCloud(quests);
+    await saveResetLog(log);
+    showToast('🔄 Daily Quest ถูก reset แล้ว!');
   }
 
-  var dayOfWeek = now.getDay();
-  if (dayOfWeek === parseInt(settings.weeklyResetDay)) {
-    var lastWeekly = localStorage.getItem('mff_last_weekly_reset');
-    if (now >= resetToday && (!lastWeekly || new Date(lastWeekly) < resetToday)) {
-      quests = quests.map(function(q){ return q.type==='weekly' ? Object.assign({},q,{done:false}) : q; });
-      saveQuests(quests);
-      localStorage.setItem('mff_last_weekly_reset', now.toISOString());
-    }
+  // Weekly
+  const [rh, rm] = settings.dailyResetTime.split(':').map(Number);
+  const targetDay = parseInt(settings.weeklyResetDay);
+  const weeklyRef = new Date(now);
+  weeklyRef.setHours(rh, rm, 0, 0);
+  const daysBack = (now.getDay() - targetDay + 7) % 7 || (now < weeklyRef ? 7 : 0);
+  weeklyRef.setDate(weeklyRef.getDate() - daysBack);
+
+  const lastWeekly = log.lastWeeklyReset ? new Date(log.lastWeeklyReset) : null;
+  if (!lastWeekly || lastWeekly < weeklyRef) {
+    quests = quests.map(q => q.type === 'weekly' ? { ...q, done: false } : q);
+    log.lastWeeklyReset = now.toISOString();
+    await saveQuestsToCloud(quests);
+    await saveResetLog(log);
+    showToast('🔄 Weekly Quest ถูก reset แล้ว!');
   }
 }
 
@@ -558,102 +439,96 @@ function escHtml(s) {
 }
 
 function updateDate() {
-  var now = new Date();
-  var days = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
-  var months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  var hh = String(now.getHours()).padStart(2,'0');
-  var mm = String(now.getMinutes()).padStart(2,'0');
+  const now = new Date();
+  const days = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
+  const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
   document.getElementById('header-date').innerHTML =
-    'วัน'+days[now.getDay()]+' '+now.getDate()+' '+months[now.getMonth()]+' '+(now.getFullYear()+543)+'<br>'+
-    '<span style="color:var(--text3);font-size:11px">'+hh+':'+mm+' น.</span>';
+    `วัน${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()+543}<br>
+     <span style="color:var(--text3);font-size:11px">${hh}:${mm} น.</span>`;
 }
 
 function updateProgress() {
-  var tabQ = quests.filter(function(q){ return q.type===currentTab; });
-  var done = tabQ.filter(function(q){ return q.done; }).length;
-  var total = tabQ.length;
-  var pct = total ? done/total : 0;
-  var circ = 100.53;
-  document.getElementById('prog-circle').style.strokeDashoffset = (circ - pct*circ).toFixed(2);
-  document.getElementById('prog-label').textContent = done+'/'+total;
-  var labels = {daily:'Daily',weekly:'Weekly',special:'Special'};
-  document.getElementById('prog-title').textContent = labels[currentTab]+' Progress';
+  const tabQ = quests.filter(q => q.type === currentTab);
+  const done = tabQ.filter(q => q.done).length;
+  const total = tabQ.length;
+  const pct = total ? done / total : 0;
+  const circ = 100.53;
+  document.getElementById('prog-circle').style.strokeDashoffset = (circ - pct * circ).toFixed(2);
+  document.getElementById('prog-label').textContent = `${done}/${total}`;
+  const labels = { daily:'Daily', weekly:'Weekly', special:'Special' };
+  document.getElementById('prog-title').textContent = `${labels[currentTab]} Progress`;
   document.getElementById('prog-sub').textContent =
-    total===0 ? 'กด + เพื่อเพิ่ม Quest' :
-    done===total ? '✅ เสร็จหมดแล้ว!' :
-    'เหลืออีก '+(total-done)+' รายการ';
+    total === 0 ? 'กด + เพื่อเพิ่ม Quest' :
+    done === total ? '✅ เสร็จหมดแล้ว!' :
+    `เหลืออีก ${total - done} รายการ`;
 }
 
 function startCountdown() {
   if (countdownTimer) clearInterval(countdownTimer);
   function tick() {
-    var now = new Date();
-    var parts = settings.dailyResetTime.split(':');
-    var next = new Date(now);
-    next.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
-    if (next <= now) next.setDate(next.getDate()+1);
-    var diff = next - now;
-    var h = Math.floor(diff/3600000);
-    var m = Math.floor((diff%3600000)/60000);
-    var s = Math.floor((diff%60000)/1000);
+    const now = new Date();
+    const [rh, rm] = settings.dailyResetTime.split(':').map(Number);
+    const next = new Date(now);
+    next.setHours(rh, rm, 0, 0);
+    if (next <= now) next.setDate(next.getDate() + 1);
+    const diff = next - now;
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
     document.getElementById('reset-badge').textContent =
-      '⏱ Daily reset ใน '+h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+      `⏱ Daily reset ใน ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   }
   tick();
   countdownTimer = setInterval(tick, 1000);
 }
 
 function renderQuests() {
-  var container = document.getElementById('quest-content');
-  var tabQ = quests.filter(function(q){ return q.type===currentTab; });
-  var todo = tabQ.filter(function(q){ return !q.done; });
-  var done = tabQ.filter(function(q){ return q.done; });
-
-  if (tabQ.length===0) {
+  const container = document.getElementById('quest-content');
+  const tabQ = quests.filter(q => q.type === currentTab);
+  const todo = tabQ.filter(q => !q.done);
+  const done = tabQ.filter(q => q.done);
+  if (tabQ.length === 0) {
     container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div>ยังไม่มี Quest<br>กด + เพื่อเพิ่มรายการ</div></div>';
     return;
   }
-
-  var html = '';
-  if (todo.length>0) {
-    html += '<div class="section-label">ยังไม่ได้ทำ ('+todo.length+')</div>';
-    todo.forEach(function(q){ html += cardHTML(q); });
+  let html = '';
+  if (todo.length > 0) {
+    html += `<div class="section-label">ยังไม่ได้ทำ (${todo.length})</div>`;
+    todo.forEach(q => { html += cardHTML(q); });
   }
-  if (done.length>0) {
-    html += '<div class="section-label" style="margin-top:8px">เสร็จแล้ว ('+done.length+')</div>';
-    done.forEach(function(q){ html += cardHTML(q); });
+  if (done.length > 0) {
+    html += `<div class="section-label" style="margin-top:8px">เสร็จแล้ว (${done.length})</div>`;
+    done.forEach(q => { html += cardHTML(q); });
   }
   container.innerHTML = html;
-
-  // attach events after render
-  container.querySelectorAll('.quest-card').forEach(function(el) {
-    var id = el.dataset.id;
-    el.addEventListener('click', function(){ toggleQuest(id); });
+  container.querySelectorAll('.quest-card').forEach(el => {
+    el.addEventListener('click', () => toggleQuest(el.dataset.id));
   });
-  container.querySelectorAll('.edit-btn').forEach(function(el) {
-    var id = el.dataset.id;
-    el.addEventListener('click', function(e){ e.stopPropagation(); openEditModal(id); });
+  container.querySelectorAll('.edit-btn').forEach(el => {
+    el.addEventListener('click', e => { e.stopPropagation(); openEditModal(el.dataset.id); });
   });
 }
 
 function cardHTML(q) {
-  var bc = {daily:'badge-daily',weekly:'badge-weekly',special:'badge-special'}[q.type];
-  var bt = {daily:'Daily',weekly:'Weekly',special:'Special'}[q.type];
-  var check = q.done
+  const bc = { daily:'badge-daily', weekly:'badge-weekly', special:'badge-special' }[q.type];
+  const bt = { daily:'Daily', weekly:'Weekly', special:'Special' }[q.type];
+  const check = q.done
     ? '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     : '';
-  return '<div class="quest-card'+(q.done?' done':'')+'" data-id="'+q.id+'">'
-    +'<div class="checkbox'+(q.done?' checked':'')+'">'+check+'</div>'
-    +'<div class="quest-body">'
-      +'<div class="quest-name'+(q.done?' done':'')+'">'+escHtml(q.name)+'</div>'
-      +'<div class="quest-meta">'
-        +'<span class="quest-type-badge '+bc+'">'+bt+'</span>'
-        +(q.note ? '<span class="quest-tag">'+escHtml(q.note)+'</span>' : '')
-      +'</div>'
-    +'</div>'
-    +(q.reward ? '<div class="quest-reward">🏅 '+escHtml(q.reward)+'</div>' : '')
-    +'<div class="edit-btn" data-id="'+q.id+'">✏️</div>'
-  +'</div>';
+  return `<div class="quest-card${q.done?' done':''}" data-id="${q.id}">
+    <div class="checkbox${q.done?' checked'}">${check}</div>
+    <div class="quest-body">
+      <div class="quest-name${q.done?' done'}">${escHtml(q.name)}</div>
+      <div class="quest-meta">
+        <span class="quest-type-badge ${bc}">${bt}</span>
+        ${q.note ? `<span class="quest-tag">${escHtml(q.note)}</span>` : ''}
+      </div>
+    </div>
+    ${q.reward ? `<div class="quest-reward">🏅 ${escHtml(q.reward)}</div>` : ''}
+    <div class="edit-btn" data-id="${q.id}">✏️</div>
+  </div>`;
 }
 
 function refresh() {
@@ -665,32 +540,32 @@ function refresh() {
 // ── ACTIONS ───────────────────────────────────────────────────────────
 function switchTab(tab) {
   currentTab = tab;
-  ['daily','weekly','special'].forEach(function(t){
-    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+  ['daily','weekly','special'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t === tab);
   });
   refresh();
 }
 
-function toggleQuest(id) {
-  var q = quests.find(function(x){ return x.id===id; });
+async function toggleQuest(id) {
+  const q = quests.find(x => x.id === id);
   if (!q) return;
   q.done = !q.done;
-  saveQuests(quests);
-  if (q.done) showToast('✅ '+q.name+' — เสร็จแล้ว!');
   refresh();
+  if (q.done) showToast(`✅ ${q.name} — เสร็จแล้ว!`);
+  await saveQuestsToCloud(quests);
 }
 
 function showPage(page) {
-  var isQuest = page==='quest';
+  const isQuest = page === 'quest';
   document.getElementById('quest-content').style.display = isQuest ? '' : 'none';
   document.getElementById('main-tabs').style.display = isQuest ? '' : 'none';
   document.getElementById('fab-btn').style.display = isQuest ? '' : 'none';
-  document.getElementById('notify-page').classList.toggle('show', page==='notify');
-  document.getElementById('settings-page').classList.toggle('show', page==='settings');
-  ['quest','notify','settings'].forEach(function(p){
-    document.getElementById('nav-'+p).classList.toggle('active', p===page);
+  document.getElementById('notify-page').classList.toggle('show', page === 'notify');
+  document.getElementById('settings-page').classList.toggle('show', page === 'settings');
+  ['quest','notify','settings'].forEach(p => {
+    document.getElementById('nav-'+p).classList.toggle('active', p === page);
   });
-  if (page==='notify') loadNotifyUI();
+  if (page === 'notify') loadNotifyUI();
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────
@@ -703,11 +578,11 @@ function openAddModal() {
   document.getElementById('quest-type-select').value = currentTab;
   document.getElementById('delete-btn-wrap').style.display = 'none';
   document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(function(){ document.getElementById('quest-name-input').focus(); }, 350);
+  setTimeout(() => document.getElementById('quest-name-input').focus(), 350);
 }
 
 function openEditModal(id) {
-  var q = quests.find(function(x){ return x.id===id; });
+  const q = quests.find(x => x.id === id);
   if (!q) return;
   editingId = id;
   document.getElementById('modal-title').textContent = 'แก้ไข Quest';
@@ -723,155 +598,177 @@ function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
 }
 
-function saveQuest() {
-  var name = document.getElementById('quest-name-input').value.trim();
+async function saveQuest() {
+  const name = document.getElementById('quest-name-input').value.trim();
   if (!name) { showToast('⚠️ กรุณาใส่ชื่อ Quest'); return; }
-  var type   = document.getElementById('quest-type-select').value;
-  var reward = document.getElementById('quest-reward-input').value.trim();
-  var note   = document.getElementById('quest-note-input').value.trim();
+  const type   = document.getElementById('quest-type-select').value;
+  const reward = document.getElementById('quest-reward-input').value.trim();
+  const note   = document.getElementById('quest-note-input').value.trim();
   if (editingId) {
-    var q = quests.find(function(x){ return x.id===editingId; });
-    if (q) { q.name=name; q.type=type; q.reward=reward; q.note=note; }
+    const q = quests.find(x => x.id === editingId);
+    if (q) { q.name = name; q.type = type; q.reward = reward; q.note = note; }
   } else {
-    quests.push({id:'q'+Date.now(), name:name, type:type, reward:reward, note:note, done:false});
+    quests.push({ id: 'q' + Date.now(), name, type, reward, note, done: false });
     switchTab(type);
   }
-  saveQuests(quests);
   closeModal();
   refresh();
   showToast(editingId ? '✏️ แก้ไขแล้ว' : '➕ เพิ่ม Quest แล้ว');
+  await saveQuestsToCloud(quests);
 }
 
-function deleteQuest() {
+async function deleteQuest() {
   if (!editingId) return;
-  quests = quests.filter(function(q){ return q.id!==editingId; });
-  saveQuests(quests);
+  quests = quests.filter(q => q.id !== editingId);
   closeModal();
   refresh();
   showToast('🗑️ ลบ Quest แล้ว');
+  await saveQuestsToCloud(quests);
 }
 
-function resetTab(tab) {
-  if (!confirm('รีเซ็ต Quest ใน '+tab+' ทั้งหมดใช่ไหม?')) return;
-  quests = quests.map(function(q){ return q.type===tab ? Object.assign({},q,{done:false}) : q; });
-  saveQuests(quests);
-  if (currentTab===tab) refresh();
-  showToast('🔄 รีเซ็ต '+tab+' แล้ว');
+async function resetTab(tab) {
+  if (!confirm(`รีเซ็ต Quest ใน ${tab} ทั้งหมดใช่ไหม?`)) return;
+  quests = quests.map(q => q.type === tab ? { ...q, done: false } : q);
+  if (currentTab === tab) refresh();
+  showToast(`🔄 รีเซ็ต ${tab} แล้ว`);
+  await saveQuestsToCloud(quests);
 }
 
-function clearAll() {
+async function clearAll() {
   if (!confirm('ลบข้อมูลทั้งหมดใช่ไหม? (ไม่สามารถย้อนกลับได้)')) return;
-  localStorage.clear();
-  quests = loadQuests();
-  settings = loadSettings();
+  quests = DEFAULT_QUESTS.map(x => ({ ...x }));
+  settings = { ...DEFAULT_SETTINGS };
   refresh();
   showToast('🗑️ ล้างข้อมูลทั้งหมดแล้ว');
+  await saveQuestsToCloud(quests);
+  await saveSettingsToCloud(settings);
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────
 function showToast(msg) {
-  var el = document.getElementById('toast');
+  const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
   if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2500);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
 }
 
 // ── NOTIFICATIONS ─────────────────────────────────────────────────────
 function loadNotifyUI() {
   document.getElementById('daily-notify-min').value = settings.dailyNotifyMin;
-  document.getElementById('daily-reset-time').value  = settings.dailyResetTime;
+  document.getElementById('daily-reset-time').value = settings.dailyResetTime;
   document.getElementById('weekly-notify-min').value = settings.weeklyNotifyMin;
-  document.getElementById('weekly-reset-day').value  = settings.weeklyResetDay;
-  updateNotifStatus();
-}
-
-function updateNotifStatus() {
-  var el = document.getElementById('notif-status');
-  if (!('Notification' in window)) {
-    el.textContent = '❌ เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน';
-  } else if (Notification.permission==='granted') {
-    el.textContent = '✅ เปิดการแจ้งเตือนแล้ว';
-    el.style.color = 'var(--green)';
-  } else if (Notification.permission==='denied') {
-    el.textContent = '❌ ถูกปฏิเสธ — เปิดในการตั้งค่าเบราว์เซอร์';
-    el.style.color = 'var(--red)';
-  } else {
-    el.textContent = '⏳ ยังไม่ได้อนุญาต';
-    el.style.color = '';
-  }
+  document.getElementById('weekly-reset-day').value = settings.weeklyResetDay;
+  const el = document.getElementById('notif-status');
+  if (!('Notification' in window)) { el.textContent = '❌ ไม่รองรับ'; return; }
+  if (Notification.permission === 'granted') { el.textContent = '✅ เปิดการแจ้งเตือนแล้ว'; el.style.color = 'var(--green)'; }
+  else if (Notification.permission === 'denied') { el.textContent = '❌ ถูกปฏิเสธ'; el.style.color = 'var(--red)'; }
+  else { el.textContent = '⏳ ยังไม่ได้อนุญาต'; el.style.color = ''; }
 }
 
 // ── EVENT LISTENERS ───────────────────────────────────────────────────
-document.getElementById('tab-daily').addEventListener('click',   function(){ switchTab('daily'); });
-document.getElementById('tab-weekly').addEventListener('click',  function(){ switchTab('weekly'); });
-document.getElementById('tab-special').addEventListener('click', function(){ switchTab('special'); });
-
-document.getElementById('nav-quest').addEventListener('click',    function(){ showPage('quest'); });
-document.getElementById('nav-notify').addEventListener('click',   function(){ showPage('notify'); });
-document.getElementById('nav-settings').addEventListener('click', function(){ showPage('settings'); });
-
+document.getElementById('tab-daily').addEventListener('click',   () => switchTab('daily'));
+document.getElementById('tab-weekly').addEventListener('click',  () => switchTab('weekly'));
+document.getElementById('tab-special').addEventListener('click', () => switchTab('special'));
+document.getElementById('nav-quest').addEventListener('click',    () => showPage('quest'));
+document.getElementById('nav-notify').addEventListener('click',   () => showPage('notify'));
+document.getElementById('nav-settings').addEventListener('click', () => showPage('settings'));
 document.getElementById('fab-btn').addEventListener('click', openAddModal);
-
-document.getElementById('modal-overlay').addEventListener('click', function(e){
-  if (e.target===document.getElementById('modal-overlay')) closeModal();
-});
+document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === document.getElementById('modal-overlay')) closeModal(); });
 document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
 document.getElementById('modal-save-btn').addEventListener('click', saveQuest);
 document.getElementById('modal-delete-btn').addEventListener('click', deleteQuest);
-
-document.getElementById('reset-daily-btn').addEventListener('click',   function(){ resetTab('daily'); });
-document.getElementById('reset-weekly-btn').addEventListener('click',  function(){ resetTab('weekly'); });
-document.getElementById('reset-special-btn').addEventListener('click', function(){ resetTab('special'); });
+document.getElementById('reset-daily-btn').addEventListener('click',   () => resetTab('daily'));
+document.getElementById('reset-weekly-btn').addEventListener('click',  () => resetTab('weekly'));
+document.getElementById('reset-special-btn').addEventListener('click', () => resetTab('special'));
 document.getElementById('clear-all-btn').addEventListener('click', clearAll);
-
-document.getElementById('notif-perm-btn').addEventListener('click', function(){
+document.getElementById('notif-perm-btn').addEventListener('click', () => {
   if (!('Notification' in window)) { showToast('❌ ไม่รองรับ'); return; }
-  Notification.requestPermission().then(function(p){
-    if (p==='granted') { showToast('✅ เปิดการแจ้งเตือนสำเร็จ!'); }
-    else { showToast('❌ ไม่ได้รับอนุญาต'); }
-    updateNotifStatus();
+  Notification.requestPermission().then(p => {
+    showToast(p === 'granted' ? '✅ เปิดการแจ้งเตือนสำเร็จ!' : '❌ ไม่ได้รับอนุญาต');
+    loadNotifyUI();
   });
 });
-
-document.getElementById('test-notif-btn').addEventListener('click', function(){
-  if (Notification.permission!=='granted') { showToast('⚠️ อนุญาตการแจ้งเตือนก่อน'); return; }
-  new Notification('MFF Quest Tracker ⚡', { body:'⏰ ทดสอบแจ้งเตือน — Daily reset ใกล้แล้ว!' });
+document.getElementById('test-notif-btn').addEventListener('click', () => {
+  if (Notification.permission !== 'granted') { showToast('⚠️ อนุญาตการแจ้งเตือนก่อน'); return; }
+  new Notification('MFF Quest Tracker ⚡', { body: '⏰ ทดสอบแจ้งเตือน — Daily reset ใกล้แล้ว!' });
 });
-
-document.getElementById('save-notify-btn').addEventListener('click', function(){
+document.getElementById('save-notify-btn').addEventListener('click', async () => {
   settings.dailyNotifyMin  = parseInt(document.getElementById('daily-notify-min').value);
   settings.dailyResetTime  = document.getElementById('daily-reset-time').value;
   settings.weeklyNotifyMin = parseInt(document.getElementById('weekly-notify-min').value);
   settings.weeklyResetDay  = parseInt(document.getElementById('weekly-reset-day').value);
-  saveSettings(settings);
   startCountdown();
   showToast('💾 บันทึกการตั้งค่าแล้ว');
+  await saveSettingsToCloud(settings);
 });
-
-document.addEventListener('keydown', function(e){
+document.addEventListener('keydown', e => {
   if (!document.getElementById('modal-overlay').classList.contains('open')) return;
-  if (e.key==='Enter') saveQuest();
-  if (e.key==='Escape') closeModal();
+  if (e.key === 'Enter') saveQuest();
+  if (e.key === 'Escape') closeModal();
 });
 
-// ── INIT ──────────────────────────────────────────────────────────────
-checkAutoReset();
-refresh();
-startCountdown();
-setInterval(updateDate, 30000);
+// ── REALTIME LISTENER + INIT ──────────────────────────────────────────
+async function init() {
+  setSyncStatus('ing', 'กำลังโหลด...');
+  try {
+    // โหลด settings
+    const settSnap = await getDoc(settingsDocRef);
+    if (settSnap.exists()) settings = { ...DEFAULT_SETTINGS, ...settSnap.data() };
 
-})();
-</script>
+    // โหลด quests
+    const qSnap = await getDoc(questsDocRef);
+    if (qSnap.exists() && qSnap.data().list) {
+      quests = qSnap.data().list;
+    } else {
+      // ครั้งแรก — บันทึก default ขึ้น cloud
+      quests = DEFAULT_QUESTS.map(x => ({ ...x }));
+      await saveQuestsToCloud(quests);
+    }
 
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(() => console.log('Service Worker Registered'))
-      .catch(err => console.log('SW registration failed:', err));
-  });
+    // เช็ค auto reset
+    await checkAutoReset();
+
+    // ซ่อน loading
+    document.getElementById('loading-overlay').classList.add('hide');
+    refresh();
+    startCountdown();
+    setInterval(updateDate, 30000);
+    setSyncStatus('ok', 'sync แล้ว');
+
+    // Real-time listener — อัปเดตทุกครั้งที่ข้อมูลใน Firestore เปลี่ยน
+    onSnapshot(questsDocRef, snap => {
+      if (snap.exists() && snap.data().list && !isSaving) {
+        quests = snap.data().list;
+        refresh();
+        setSyncStatus('ok', 'sync แล้ว');
+      }
+    });
+
+    // เช็ค reset ทุก 1 นาที
+    setInterval(async () => {
+      await checkAutoReset();
+      refresh();
+    }, 60000);
+
+  } catch(e) {
+    console.error('init error', e);
+    setSyncStatus('err', 'เชื่อมต่อไม่ได้');
+    // fallback localStorage
+    try {
+      const backup = localStorage.getItem('mff_quests_backup');
+      if (backup) quests = JSON.parse(backup);
+      else quests = DEFAULT_QUESTS.map(x => ({ ...x }));
+    } catch(_) { quests = DEFAULT_QUESTS.map(x => ({ ...x })); }
+    document.getElementById('loading-overlay').classList.add('hide');
+    refresh();
+    startCountdown();
+    setInterval(updateDate, 30000);
+    showToast('⚠️ ออฟไลน์ — ใช้ข้อมูลในเครื่อง');
+  }
 }
+
+init();
 </script>
 
 </body>
