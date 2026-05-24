@@ -4,20 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0d0d1a">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MFF Quest">
 <title>MFF Quest Tracker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap');
-:root {
-  --bg:#0d0d1a;--bg2:#13132a;--bg3:#1a1a35;--gold:#e8c04a;--gold-dim:rgba(232,192,74,0.15);
-  --green:#3ecf8e;--red:#ff5f5f;--red-dim:rgba(255,95,95,0.12);
-  --blue:#5b8dee;--blue-dim:rgba(91,141,238,0.15);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.15);
-  --text:#e8e8f0;--text2:#9090b0;--text3:#5a5a80;
-  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-  --radius:12px;--radius-sm:8px;
-}
+:root{--bg:#0d0d1a;--bg2:#13132a;--bg3:#1a1a35;--gold:#e8c04a;--gold-dim:rgba(232,192,74,0.15);--green:#3ecf8e;--red:#ff5f5f;--red-dim:rgba(255,95,95,0.12);--blue:#5b8dee;--blue-dim:rgba(91,141,238,0.15);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.15);--text:#e8e8f0;--text2:#9090b0;--text3:#5a5a80;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--radius:12px;--radius-sm:8px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai',sans-serif;font-size:14px;line-height:1.5;overscroll-behavior:none}
 .app{display:flex;flex-direction:column;height:100dvh;max-width:480px;margin:0 auto;position:relative;overflow:hidden}
@@ -102,7 +95,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 .toast.show{transform:translateX(-50%) translateY(0)}
 .fab{position:absolute;bottom:calc(72px + env(safe-area-inset-bottom,0));right:16px;width:48px;height:48px;background:var(--gold);color:#0d0d1a;border-radius:50%;border:none;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:50;transition:transform .15s;box-shadow:0 4px 16px rgba(232,192,74,0.4)}
 .fab:active{transform:scale(.9)}
-/* Loading overlay */
 .loading-overlay{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:300}
 .loading-overlay.hide{display:none}
 .spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
@@ -112,20 +104,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 </head>
 <body>
 <div class="app" id="app">
-
-  <!-- LOADING -->
   <div class="loading-overlay" id="loading-overlay">
     <div class="spinner"></div>
     <div class="loading-text">กำลังโหลดข้อมูล...</div>
   </div>
-
   <div class="toast" id="toast"></div>
-
-  <!-- HEADER -->
   <div class="header" id="main-header">
     <div class="header-top">
       <div class="logo">
-        <div class="logo-icon">⚡</div>
+        <div class="logo-icon">&#9889;</div>
         <div>
           <div class="logo-text">MFF QUEST</div>
           <div class="logo-sub">TRACKER</div>
@@ -137,9 +124,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       <div class="mini-ring">
         <svg width="40" height="40" viewBox="0 0 40 40">
           <circle cx="20" cy="20" r="16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
-          <circle id="prog-circle" cx="20" cy="20" r="16" fill="none" stroke="#e8c04a"
-            stroke-width="4" stroke-dasharray="100.53" stroke-dashoffset="100.53"
-            stroke-linecap="round" style="transition:stroke-dashoffset .4s ease"/>
+          <circle id="prog-circle" cx="20" cy="20" r="16" fill="none" stroke="#e8c04a" stroke-width="4" stroke-dasharray="100.53" stroke-dashoffset="100.53" stroke-linecap="round" style="transition:stroke-dashoffset .4s ease"/>
         </svg>
         <div class="mini-ring-label" id="prog-label">0/0</div>
       </div>
@@ -147,28 +132,22 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
         <div class="progress-title" id="prog-title">Daily Progress</div>
         <div class="progress-sub" id="prog-sub">กำลังโหลด...</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <div class="reset-badge" id="reset-badge">⏱ reset ใน --:--</div>
-          <div class="sync-badge sync-ing" id="sync-badge">☁️ กำลัง sync...</div>
+          <div class="reset-badge" id="reset-badge">&#9201; reset ใน --:--</div>
+          <div class="sync-badge sync-ing" id="sync-badge">&#9729; กำลัง sync...</div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- TABS -->
   <div class="tabs" id="main-tabs">
     <button class="tab-btn active" id="tab-daily">Daily</button>
     <button class="tab-btn" id="tab-weekly">Weekly</button>
     <button class="tab-btn" id="tab-special">Special</button>
   </div>
-
-  <!-- QUEST LIST -->
   <div class="content" id="quest-content"></div>
-
-  <!-- NOTIFY PAGE -->
   <div class="subpage" id="notify-page">
     <div class="notify-card">
-      <div class="notify-title">⏰ แจ้งเตือน Daily Reset</div>
-      <div class="notify-desc">แจ้งเตือนก่อน Daily quest reset (reset เวลา 05:00 น. เวลาไทย)</div>
+      <div class="notify-title">&#9200; แจ้งเตือน Daily Reset</div>
+      <div class="notify-desc">แจ้งเตือนก่อน Daily quest reset</div>
       <div class="notify-time-row">
         <div class="time-label">แจ้งเตือนก่อน</div>
         <input type="number" class="time-input" id="daily-notify-min" value="30" min="5" max="120"> นาที
@@ -179,7 +158,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       </div>
     </div>
     <div class="notify-card">
-      <div class="notify-title">📅 แจ้งเตือน Weekly Reset</div>
+      <div class="notify-title">&#128197; แจ้งเตือน Weekly Reset</div>
       <div class="notify-desc">แจ้งเตือนก่อน Weekly quest reset ทุกสัปดาห์</div>
       <div class="notify-time-row">
         <div class="time-label">แจ้งเตือนก่อน</div>
@@ -196,7 +175,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       </div>
     </div>
     <div class="notify-card">
-      <div class="notify-title">🔔 เปิดการแจ้งเตือน</div>
+      <div class="notify-title">&#128276; เปิดการแจ้งเตือน</div>
       <div class="notify-desc">อนุญาตการแจ้งเตือนเพื่อรับ reminder ก่อน reset</div>
       <button class="permission-btn" id="notif-perm-btn">ขออนุญาตการแจ้งเตือน</button>
       <div style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center" id="notif-status"></div>
@@ -206,13 +185,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       <button class="btn btn-primary" id="save-notify-btn">บันทึก</button>
     </div>
   </div>
-
-  <!-- SETTINGS PAGE -->
   <div class="subpage" id="settings-page">
     <div class="settings-section">
-      <div class="settings-header">☁️ Firebase Sync</div>
+      <div class="settings-header">Firebase Sync</div>
       <div class="settings-row">
-        <div><div class="settings-label" id="fb-status-label">กำลังเชื่อมต่อ...</div><div class="settings-sub" id="fb-status-sub">ข้อมูลจะ sync ทันทีที่แก้ไข</div></div>
+        <div>
+          <div class="settings-label" id="fb-status-label">กำลังเชื่อมต่อ...</div>
+          <div class="settings-sub" id="fb-status-sub">ข้อมูลจะ sync ทันทีที่แก้ไข</div>
+        </div>
       </div>
     </div>
     <div class="settings-section">
@@ -244,23 +224,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
         <div style="font-size:12px;color:var(--text3)">v2.0 Firebase</div>
       </div>
       <div class="settings-row">
-        <div><div class="settings-label">ติดตั้งเป็น App</div><div class="settings-sub">Chrome → เมนู ⋮ → "เพิ่มลงในหน้าจอหลัก"</div></div>
-        <span style="font-size:18px">📲</span>
+        <div><div class="settings-label">ติดตั้งเป็น App</div><div class="settings-sub">Chrome เมนู 3 จุด แล้วเลือก "เพิ่มลงในหน้าจอหลัก"</div></div>
+        <span style="font-size:18px">&#128242;</span>
       </div>
     </div>
   </div>
-
-  <!-- FAB -->
   <button class="fab" id="fab-btn">+</button>
-
-  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
-    <button class="nav-item active" id="nav-quest"><span class="nav-icon">📋</span>Quest</button>
-    <button class="nav-item" id="nav-notify"><span class="nav-icon">🔔</span>แจ้งเตือน</button>
-    <button class="nav-item" id="nav-settings"><span class="nav-icon">⚙️</span>ตั้งค่า</button>
+    <button class="nav-item active" id="nav-quest"><span class="nav-icon">&#128203;</span>Quest</button>
+    <button class="nav-item" id="nav-notify"><span class="nav-icon">&#128276;</span>แจ้งเตือน</button>
+    <button class="nav-item" id="nav-settings"><span class="nav-icon">&#9881;</span>ตั้งค่า</button>
   </div>
-
-  <!-- MODAL -->
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal">
       <div class="modal-handle"></div>
@@ -284,37 +258,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       </div>
     </div>
   </div>
-
 </div>
 
-<!-- Firebase SDK -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-import {
-  getFirestore, doc, getDoc, setDoc, onSnapshot, collection, deleteDoc
-} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js';
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js';
 
-// ── FIREBASE CONFIG ───────────────────────────────────────────────────
-const firebaseConfig = {
-  apiKey: "AIzaSyDQh9LUe6urmSiE1tAyR10novUfGwgm9Ck",
-  authDomain: "mff-quest.firebaseapp.com",
-  projectId: "mff-quest",
-  storageBucket: "mff-quest.firebasestorage.app",
-  messagingSenderId: "835391445822",
-  appId: "1:835391445822:web:538ab26a5f7be5799eea6f"
+var firebaseConfig = {
+  apiKey: 'AIzaSyDQh9LUe6urmSiE1tAyR10novUfGwgm9Ck',
+  authDomain: 'mff-quest.firebaseapp.com',
+  projectId: 'mff-quest',
+  storageBucket: 'mff-quest.firebasestorage.app',
+  messagingSenderId: '835391445822',
+  appId: '1:835391445822:web:538ab26a5f7be5799eea6f'
 };
-const fbApp = initializeApp(firebaseConfig);
-const db = getFirestore(fbApp);
 
-// ── FIRESTORE PATHS ───────────────────────────────────────────────────
-// ใช้ user id ตายตัว (แอปส่วนตัว ไม่มี auth)
-const USER_ID = 'fluke_ysp';
-const questsDocRef  = doc(db, 'users', USER_ID, 'data', 'quests');
-const settingsDocRef = doc(db, 'users', USER_ID, 'data', 'settings');
-const resetDocRef    = doc(db, 'users', USER_ID, 'data', 'resetLog');
+var fbApp = initializeApp(firebaseConfig);
+var db = getFirestore(fbApp);
+var USER_ID = 'fluke_ysp';
+var questsRef  = doc(db, 'users', USER_ID, 'data', 'quests');
+var settingsRef = doc(db, 'users', USER_ID, 'data', 'settings');
+var resetRef    = doc(db, 'users', USER_ID, 'data', 'resetLog');
 
-// ── DEFAULT DATA ──────────────────────────────────────────────────────
-const DEFAULT_QUESTS = [
+var DEFAULT_QUESTS = [
   {id:'q1',name:'Villain Siege',type:'daily',reward:'500 Gold',note:'All modes',done:false},
   {id:'q2',name:'World Boss',type:'daily',reward:'300 Gold',note:'3 ครั้ง',done:false},
   {id:'q3',name:'Alliance Battle',type:'daily',reward:'200 Gold',note:'',done:false},
@@ -325,210 +291,210 @@ const DEFAULT_QUESTS = [
   {id:'q8',name:'Giant Boss Raid',type:'weekly',reward:'1000 Gold',note:'',done:false},
   {id:'q9',name:'Timeline Battle',type:'weekly',reward:'800 Gold',note:'',done:false},
   {id:'q10',name:'Battleworld',type:'special',reward:'3000 Gold',note:'Event limited',done:false},
-  {id:'q11',name:'Super Hero League',type:'special',reward:'2500 Gold',note:'',done:false},
+  {id:'q11',name:'Super Hero League',type:'special',reward:'2500 Gold',note:'',done:false}
 ];
-const DEFAULT_SETTINGS = {
-  dailyResetTime:'05:00', dailyNotifyMin:30, weeklyResetDay:1, weeklyNotifyMin:60
-};
+var DEFAULT_SETTINGS = {dailyResetTime:'05:00',dailyNotifyMin:30,weeklyResetDay:1,weeklyNotifyMin:60};
 
-// ── STATE ─────────────────────────────────────────────────────────────
-let quests = [];
-let settings = { ...DEFAULT_SETTINGS };
-let currentTab = 'daily';
-let editingId = null;
-let countdownTimer = null;
-let toastTimer = null;
-let isSaving = false;
+var quests = [];
+var settings = Object.assign({}, DEFAULT_SETTINGS);
+var currentTab = 'daily';
+var editingId = null;
+var countdownTimer = null;
+var toastTimer = null;
+var isSaving = false;
 
-// ── SYNC STATUS ───────────────────────────────────────────────────────
 function setSyncStatus(state, msg) {
-  const el = document.getElementById('sync-badge');
+  var el = document.getElementById('sync-badge');
   el.className = 'sync-badge';
-  if (state === 'ok')  { el.classList.add('sync-ok');  el.textContent = '☁️ ' + msg; }
-  if (state === 'err') { el.classList.add('sync-err'); el.textContent = '⚠️ ' + msg; }
-  if (state === 'ing') { el.classList.add('sync-ing'); el.textContent = '🔄 ' + msg; }
-
-  const lbl = document.getElementById('fb-status-label');
-  const sub = document.getElementById('fb-status-sub');
-  if (lbl) lbl.textContent = state === 'ok' ? '✅ เชื่อมต่อ Firebase แล้ว' : state === 'err' ? '❌ ออฟไลน์ / เชื่อมต่อไม่ได้' : '🔄 กำลัง sync...';
-  if (sub) sub.textContent = state === 'ok' ? 'sync ล่าสุด: ' + new Date().toLocaleTimeString('th-TH') : 'ข้อมูลจะ sync ทันทีที่แก้ไข';
+  if (state === 'ok')  { el.classList.add('sync-ok');  el.textContent = 'OK ' + msg; }
+  if (state === 'err') { el.classList.add('sync-err'); el.textContent = 'ERR ' + msg; }
+  if (state === 'ing') { el.classList.add('sync-ing'); el.textContent = '... ' + msg; }
+  var lbl = document.getElementById('fb-status-label');
+  var sub = document.getElementById('fb-status-sub');
+  if (lbl) lbl.textContent = state === 'ok' ? 'เชื่อมต่อ Firebase แล้ว' : state === 'err' ? 'ออฟไลน์ / เชื่อมต่อไม่ได้' : 'กำลัง sync...';
+  if (sub) sub.textContent = state === 'ok' ? ('sync ล่าสุด: ' + new Date().toLocaleTimeString('th-TH')) : 'ข้อมูลจะ sync ทันทีที่แก้ไข';
 }
 
-// ── FIRESTORE SAVE ────────────────────────────────────────────────────
-async function saveQuestsToCloud(q) {
+function saveQuestsToCloud(q) {
   isSaving = true;
   setSyncStatus('ing', 'กำลัง sync...');
-  try {
-    await setDoc(questsDocRef, { list: q });
+  return setDoc(questsRef, {list: q}).then(function() {
     setSyncStatus('ok', 'sync แล้ว');
-  } catch(e) {
+    isSaving = false;
+  }).catch(function(e) {
     console.error('saveQuests error', e);
     setSyncStatus('err', 'sync ไม่ได้');
-    // fallback localStorage
+    isSaving = false;
     try { localStorage.setItem('mff_quests_backup', JSON.stringify(q)); } catch(_) {}
-  }
-  isSaving = false;
+  });
 }
 
-async function saveSettingsToCloud(s) {
-  try {
-    await setDoc(settingsDocRef, s);
-  } catch(e) {
+function saveSettingsToCloud(s) {
+  return setDoc(settingsRef, s).catch(function(e) {
     console.error('saveSettings error', e);
     try { localStorage.setItem('mff_settings', JSON.stringify(s)); } catch(_) {}
-  }
+  });
 }
 
-async function saveResetLog(log) {
-  try { await setDoc(resetDocRef, log); } catch(e) { console.error(e); }
+function saveResetLog(log) {
+  return setDoc(resetRef, log).catch(function(e) { console.error(e); });
 }
 
-async function loadResetLog() {
-  try {
-    const snap = await getDoc(resetDocRef);
+function loadResetLog() {
+  return getDoc(resetRef).then(function(snap) {
     return snap.exists() ? snap.data() : {};
-  } catch(e) { return {}; }
+  }).catch(function() { return {}; });
 }
 
-// ── AUTO RESET ────────────────────────────────────────────────────────
 function getLastResetDate(resetTimeStr) {
-  const [rh, rm] = resetTimeStr.split(':').map(Number);
-  const now = new Date();
-  const d = new Date(now);
+  var parts = resetTimeStr.split(':');
+  var rh = parseInt(parts[0]);
+  var rm = parseInt(parts[1]);
+  var now = new Date();
+  var d = new Date(now);
   d.setHours(rh, rm, 0, 0);
   if (d > now) d.setDate(d.getDate() - 1);
   return d;
 }
 
-async function checkAutoReset() {
-  const now = new Date();
-  const lastResetTime = getLastResetDate(settings.dailyResetTime);
-  const log = await loadResetLog();
+function checkAutoReset() {
+  var now = new Date();
+  var lastResetTime = getLastResetDate(settings.dailyResetTime);
+  return loadResetLog().then(function(log) {
+    var promises = [];
+    var changed = false;
 
-  // Daily
-  const lastDaily = log.lastDailyReset ? new Date(log.lastDailyReset) : null;
-  if (!lastDaily || lastDaily < lastResetTime) {
-    quests = quests.map(q => q.type === 'daily' ? { ...q, done: false } : q);
-    log.lastDailyReset = now.toISOString();
-    await saveQuestsToCloud(quests);
-    await saveResetLog(log);
-    showToast('🔄 Daily Quest ถูก reset แล้ว!');
-  }
+    var lastDaily = log.lastDailyReset ? new Date(log.lastDailyReset) : null;
+    if (!lastDaily || lastDaily < lastResetTime) {
+      quests = quests.map(function(q) {
+        return q.type === 'daily' ? Object.assign({}, q, {done: false}) : q;
+      });
+      log.lastDailyReset = now.toISOString();
+      changed = true;
+      showToast('Daily Quest ถูก reset แล้ว!');
+    }
 
-  // Weekly
-  const [rh, rm] = settings.dailyResetTime.split(':').map(Number);
-  const targetDay = parseInt(settings.weeklyResetDay);
-  const weeklyRef = new Date(now);
-  weeklyRef.setHours(rh, rm, 0, 0);
-  const daysBack = (now.getDay() - targetDay + 7) % 7 || (now < weeklyRef ? 7 : 0);
-  weeklyRef.setDate(weeklyRef.getDate() - daysBack);
+    var parts = settings.dailyResetTime.split(':');
+    var rh = parseInt(parts[0]);
+    var rm = parseInt(parts[1]);
+    var targetDay = parseInt(settings.weeklyResetDay);
+    var weeklyRef2 = new Date(now);
+    weeklyRef2.setHours(rh, rm, 0, 0);
+    var daysBack = (now.getDay() - targetDay + 7) % 7;
+    if (daysBack === 0 && now < weeklyRef2) daysBack = 7;
+    weeklyRef2.setDate(weeklyRef2.getDate() - daysBack);
 
-  const lastWeekly = log.lastWeeklyReset ? new Date(log.lastWeeklyReset) : null;
-  if (!lastWeekly || lastWeekly < weeklyRef) {
-    quests = quests.map(q => q.type === 'weekly' ? { ...q, done: false } : q);
-    log.lastWeeklyReset = now.toISOString();
-    await saveQuestsToCloud(quests);
-    await saveResetLog(log);
-    showToast('🔄 Weekly Quest ถูก reset แล้ว!');
-  }
+    var lastWeekly = log.lastWeeklyReset ? new Date(log.lastWeeklyReset) : null;
+    if (!lastWeekly || lastWeekly < weeklyRef2) {
+      quests = quests.map(function(q) {
+        return q.type === 'weekly' ? Object.assign({}, q, {done: false}) : q;
+      });
+      log.lastWeeklyReset = now.toISOString();
+      changed = true;
+      showToast('Weekly Quest ถูก reset แล้ว!');
+    }
+
+    if (changed) {
+      promises.push(saveQuestsToCloud(quests));
+      promises.push(saveResetLog(log));
+    }
+    return Promise.all(promises);
+  });
 }
 
-// ── RENDER ────────────────────────────────────────────────────────────
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function updateDate() {
-  const now = new Date();
-  const days = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
-  const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  const hh = String(now.getHours()).padStart(2,'0');
-  const mm = String(now.getMinutes()).padStart(2,'0');
+  var now = new Date();
+  var days = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
+  var months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  var hh = String(now.getHours()).padStart(2,'0');
+  var mm2 = String(now.getMinutes()).padStart(2,'0');
   document.getElementById('header-date').innerHTML =
-    `วัน${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()+543}<br>
-     <span style="color:var(--text3);font-size:11px">${hh}:${mm} น.</span>`;
+    'วัน' + days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + (now.getFullYear()+543) +
+    '<br><span style="color:var(--text3);font-size:11px">' + hh + ':' + mm2 + ' น.</span>';
 }
 
 function updateProgress() {
-  const tabQ = quests.filter(q => q.type === currentTab);
-  const done = tabQ.filter(q => q.done).length;
-  const total = tabQ.length;
-  const pct = total ? done / total : 0;
-  const circ = 100.53;
+  var tabQ = quests.filter(function(q) { return q.type === currentTab; });
+  var doneCnt = tabQ.filter(function(q) { return q.done; }).length;
+  var total = tabQ.length;
+  var pct = total ? doneCnt / total : 0;
+  var circ = 100.53;
   document.getElementById('prog-circle').style.strokeDashoffset = (circ - pct * circ).toFixed(2);
-  document.getElementById('prog-label').textContent = `${done}/${total}`;
-  const labels = { daily:'Daily', weekly:'Weekly', special:'Special' };
-  document.getElementById('prog-title').textContent = `${labels[currentTab]} Progress`;
+  document.getElementById('prog-label').textContent = doneCnt + '/' + total;
+  var labels = {daily:'Daily', weekly:'Weekly', special:'Special'};
+  document.getElementById('prog-title').textContent = labels[currentTab] + ' Progress';
   document.getElementById('prog-sub').textContent =
     total === 0 ? 'กด + เพื่อเพิ่ม Quest' :
-    done === total ? '✅ เสร็จหมดแล้ว!' :
-    `เหลืออีก ${total - done} รายการ`;
+    doneCnt === total ? 'เสร็จหมดแล้ว!' :
+    'เหลืออีก ' + (total - doneCnt) + ' รายการ';
 }
 
 function startCountdown() {
   if (countdownTimer) clearInterval(countdownTimer);
   function tick() {
-    const now = new Date();
-    const [rh, rm] = settings.dailyResetTime.split(':').map(Number);
-    const next = new Date(now);
-    next.setHours(rh, rm, 0, 0);
+    var now = new Date();
+    var parts = settings.dailyResetTime.split(':');
+    var next = new Date(now);
+    next.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
     if (next <= now) next.setDate(next.getDate() + 1);
-    const diff = next - now;
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
+    var diff = next - now;
+    var h = Math.floor(diff / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
     document.getElementById('reset-badge').textContent =
-      `⏱ Daily reset ใน ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      'reset ใน ' + h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
   }
   tick();
   countdownTimer = setInterval(tick, 1000);
 }
 
-function renderQuests() {
-  const container = document.getElementById('quest-content');
-  const tabQ = quests.filter(q => q.type === currentTab);
-  const todo = tabQ.filter(q => !q.done);
-  const done = tabQ.filter(q => q.done);
-  if (tabQ.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div>ยังไม่มี Quest<br>กด + เพื่อเพิ่มรายการ</div></div>';
-    return;
-  }
-  let html = '';
-  if (todo.length > 0) {
-    html += `<div class="section-label">ยังไม่ได้ทำ (${todo.length})</div>`;
-    todo.forEach(q => { html += cardHTML(q); });
-  }
-  if (done.length > 0) {
-    html += `<div class="section-label" style="margin-top:8px">เสร็จแล้ว (${done.length})</div>`;
-    done.forEach(q => { html += cardHTML(q); });
-  }
-  container.innerHTML = html;
-  container.querySelectorAll('.quest-card').forEach(el => {
-    el.addEventListener('click', () => toggleQuest(el.dataset.id));
-  });
-  container.querySelectorAll('.edit-btn').forEach(el => {
-    el.addEventListener('click', e => { e.stopPropagation(); openEditModal(el.dataset.id); });
-  });
+function cardHTML(q) {
+  var bc = {daily:'badge-daily', weekly:'badge-weekly', special:'badge-special'}[q.type];
+  var bt = {daily:'Daily', weekly:'Weekly', special:'Special'}[q.type];
+  var check = q.done ? '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '';
+  return '<div class="quest-card' + (q.done ? ' done' : '') + '" data-id="' + q.id + '">' +
+    '<div class="checkbox' + (q.done ? ' checked' : '') + '">' + check + '</div>' +
+    '<div class="quest-body">' +
+      '<div class="quest-name' + (q.done ? ' done' : '') + '">' + escHtml(q.name) + '</div>' +
+      '<div class="quest-meta">' +
+        '<span class="quest-type-badge ' + bc + '">' + bt + '</span>' +
+        (q.note ? '<span class="quest-tag">' + escHtml(q.note) + '</span>' : '') +
+      '</div>' +
+    '</div>' +
+    (q.reward ? '<div class="quest-reward">' + escHtml(q.reward) + '</div>' : '') +
+    '<div class="edit-btn" data-id="' + q.id + '">&#9999;</div>' +
+  '</div>';
 }
 
-function cardHTML(q) {
-  const bc = { daily:'badge-daily', weekly:'badge-weekly', special:'badge-special' }[q.type];
-  const bt = { daily:'Daily', weekly:'Weekly', special:'Special' }[q.type];
-  const check = q.done
-    ? '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-    : '';
-  return `<div class="quest-card${q.done?' done':''}" data-id="${q.id}">
-    <div class="checkbox${q.done?' checked'}">${check}</div>
-    <div class="quest-body">
-      <div class="quest-name${q.done?' done'}">${escHtml(q.name)}</div>
-      <div class="quest-meta">
-        <span class="quest-type-badge ${bc}">${bt}</span>
-        ${q.note ? `<span class="quest-tag">${escHtml(q.note)}</span>` : ''}
-      </div>
-    </div>
-    ${q.reward ? `<div class="quest-reward">🏅 ${escHtml(q.reward)}</div>` : ''}
-    <div class="edit-btn" data-id="${q.id}">✏️</div>
-  </div>`;
+function renderQuests() {
+  var container = document.getElementById('quest-content');
+  var tabQ = quests.filter(function(q) { return q.type === currentTab; });
+  var todo = tabQ.filter(function(q) { return !q.done; });
+  var done = tabQ.filter(function(q) { return q.done; });
+  if (tabQ.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128237;</div><div>ยังไม่มี Quest<br>กด + เพื่อเพิ่มรายการ</div></div>';
+    return;
+  }
+  var html = '';
+  if (todo.length > 0) {
+    html += '<div class="section-label">ยังไม่ได้ทำ (' + todo.length + ')</div>';
+    todo.forEach(function(q) { html += cardHTML(q); });
+  }
+  if (done.length > 0) {
+    html += '<div class="section-label" style="margin-top:8px">เสร็จแล้ว (' + done.length + ')</div>';
+    done.forEach(function(q) { html += cardHTML(q); });
+  }
+  container.innerHTML = html;
+  container.querySelectorAll('.quest-card').forEach(function(el) {
+    el.addEventListener('click', function() { toggleQuest(el.dataset.id); });
+  });
+  container.querySelectorAll('.edit-btn').forEach(function(el) {
+    el.addEventListener('click', function(e) { e.stopPropagation(); openEditModal(el.dataset.id); });
+  });
 }
 
 function refresh() {
@@ -537,38 +503,36 @@ function refresh() {
   renderQuests();
 }
 
-// ── ACTIONS ───────────────────────────────────────────────────────────
 function switchTab(tab) {
   currentTab = tab;
-  ['daily','weekly','special'].forEach(t => {
-    document.getElementById('tab-'+t).classList.toggle('active', t === tab);
+  ['daily','weekly','special'].forEach(function(t) {
+    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
   });
   refresh();
 }
 
-async function toggleQuest(id) {
-  const q = quests.find(x => x.id === id);
+function toggleQuest(id) {
+  var q = quests.find(function(x) { return x.id === id; });
   if (!q) return;
   q.done = !q.done;
   refresh();
-  if (q.done) showToast(`✅ ${q.name} — เสร็จแล้ว!`);
-  await saveQuestsToCloud(quests);
+  if (q.done) showToast(q.name + ' เสร็จแล้ว!');
+  saveQuestsToCloud(quests);
 }
 
 function showPage(page) {
-  const isQuest = page === 'quest';
+  var isQuest = page === 'quest';
   document.getElementById('quest-content').style.display = isQuest ? '' : 'none';
   document.getElementById('main-tabs').style.display = isQuest ? '' : 'none';
   document.getElementById('fab-btn').style.display = isQuest ? '' : 'none';
   document.getElementById('notify-page').classList.toggle('show', page === 'notify');
   document.getElementById('settings-page').classList.toggle('show', page === 'settings');
-  ['quest','notify','settings'].forEach(p => {
-    document.getElementById('nav-'+p).classList.toggle('active', p === page);
+  ['quest','notify','settings'].forEach(function(p) {
+    document.getElementById('nav-' + p).classList.toggle('active', p === page);
   });
   if (page === 'notify') loadNotifyUI();
 }
 
-// ── MODAL ─────────────────────────────────────────────────────────────
 function openAddModal() {
   editingId = null;
   document.getElementById('modal-title').textContent = 'เพิ่ม Quest ใหม่';
@@ -578,11 +542,11 @@ function openAddModal() {
   document.getElementById('quest-type-select').value = currentTab;
   document.getElementById('delete-btn-wrap').style.display = 'none';
   document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('quest-name-input').focus(), 350);
+  setTimeout(function() { document.getElementById('quest-name-input').focus(); }, 350);
 }
 
 function openEditModal(id) {
-  const q = quests.find(x => x.id === id);
+  var q = quests.find(function(x) { return x.id === id; });
   if (!q) return;
   editingId = id;
   document.getElementById('modal-title').textContent = 'แก้ไข Quest';
@@ -598,178 +562,168 @@ function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
 }
 
-async function saveQuest() {
-  const name = document.getElementById('quest-name-input').value.trim();
-  if (!name) { showToast('⚠️ กรุณาใส่ชื่อ Quest'); return; }
-  const type   = document.getElementById('quest-type-select').value;
-  const reward = document.getElementById('quest-reward-input').value.trim();
-  const note   = document.getElementById('quest-note-input').value.trim();
+function saveQuest() {
+  var name = document.getElementById('quest-name-input').value.trim();
+  if (!name) { showToast('กรุณาใส่ชื่อ Quest'); return; }
+  var type   = document.getElementById('quest-type-select').value;
+  var reward = document.getElementById('quest-reward-input').value.trim();
+  var note   = document.getElementById('quest-note-input').value.trim();
   if (editingId) {
-    const q = quests.find(x => x.id === editingId);
+    var q = quests.find(function(x) { return x.id === editingId; });
     if (q) { q.name = name; q.type = type; q.reward = reward; q.note = note; }
   } else {
-    quests.push({ id: 'q' + Date.now(), name, type, reward, note, done: false });
+    quests.push({id: 'q' + Date.now(), name: name, type: type, reward: reward, note: note, done: false});
     switchTab(type);
   }
   closeModal();
   refresh();
-  showToast(editingId ? '✏️ แก้ไขแล้ว' : '➕ เพิ่ม Quest แล้ว');
-  await saveQuestsToCloud(quests);
+  showToast(editingId ? 'แก้ไขแล้ว' : 'เพิ่ม Quest แล้ว');
+  saveQuestsToCloud(quests);
 }
 
-async function deleteQuest() {
+function deleteQuest() {
   if (!editingId) return;
-  quests = quests.filter(q => q.id !== editingId);
+  quests = quests.filter(function(q) { return q.id !== editingId; });
   closeModal();
   refresh();
-  showToast('🗑️ ลบ Quest แล้ว');
-  await saveQuestsToCloud(quests);
+  showToast('ลบ Quest แล้ว');
+  saveQuestsToCloud(quests);
 }
 
-async function resetTab(tab) {
-  if (!confirm(`รีเซ็ต Quest ใน ${tab} ทั้งหมดใช่ไหม?`)) return;
-  quests = quests.map(q => q.type === tab ? { ...q, done: false } : q);
+function resetTab(tab) {
+  if (!confirm('รีเซ็ต Quest ใน ' + tab + ' ทั้งหมดใช่ไหม?')) return;
+  quests = quests.map(function(q) {
+    return q.type === tab ? Object.assign({}, q, {done: false}) : q;
+  });
   if (currentTab === tab) refresh();
-  showToast(`🔄 รีเซ็ต ${tab} แล้ว`);
-  await saveQuestsToCloud(quests);
+  showToast('รีเซ็ต ' + tab + ' แล้ว');
+  saveQuestsToCloud(quests);
 }
 
-async function clearAll() {
-  if (!confirm('ลบข้อมูลทั้งหมดใช่ไหม? (ไม่สามารถย้อนกลับได้)')) return;
-  quests = DEFAULT_QUESTS.map(x => ({ ...x }));
-  settings = { ...DEFAULT_SETTINGS };
+function clearAll() {
+  if (!confirm('ลบข้อมูลทั้งหมดใช่ไหม?')) return;
+  quests = DEFAULT_QUESTS.map(function(x) { return Object.assign({}, x); });
+  settings = Object.assign({}, DEFAULT_SETTINGS);
   refresh();
-  showToast('🗑️ ล้างข้อมูลทั้งหมดแล้ว');
-  await saveQuestsToCloud(quests);
-  await saveSettingsToCloud(settings);
+  showToast('ล้างข้อมูลทั้งหมดแล้ว');
+  saveQuestsToCloud(quests);
+  saveSettingsToCloud(settings);
 }
 
-// ── TOAST ─────────────────────────────────────────────────────────────
 function showToast(msg) {
-  const el = document.getElementById('toast');
+  var el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
   if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  toastTimer = setTimeout(function() { el.classList.remove('show'); }, 2500);
 }
 
-// ── NOTIFICATIONS ─────────────────────────────────────────────────────
 function loadNotifyUI() {
   document.getElementById('daily-notify-min').value = settings.dailyNotifyMin;
-  document.getElementById('daily-reset-time').value = settings.dailyResetTime;
+  document.getElementById('daily-reset-time').value  = settings.dailyResetTime;
   document.getElementById('weekly-notify-min').value = settings.weeklyNotifyMin;
-  document.getElementById('weekly-reset-day').value = settings.weeklyResetDay;
-  const el = document.getElementById('notif-status');
-  if (!('Notification' in window)) { el.textContent = '❌ ไม่รองรับ'; return; }
-  if (Notification.permission === 'granted') { el.textContent = '✅ เปิดการแจ้งเตือนแล้ว'; el.style.color = 'var(--green)'; }
-  else if (Notification.permission === 'denied') { el.textContent = '❌ ถูกปฏิเสธ'; el.style.color = 'var(--red)'; }
-  else { el.textContent = '⏳ ยังไม่ได้อนุญาต'; el.style.color = ''; }
+  document.getElementById('weekly-reset-day').value  = settings.weeklyResetDay;
+  var el = document.getElementById('notif-status');
+  if (!('Notification' in window)) { el.textContent = 'ไม่รองรับ'; return; }
+  if (Notification.permission === 'granted') { el.textContent = 'เปิดการแจ้งเตือนแล้ว'; el.style.color = 'var(--green)'; }
+  else if (Notification.permission === 'denied') { el.textContent = 'ถูกปฏิเสธ'; el.style.color = 'var(--red)'; }
+  else { el.textContent = 'ยังไม่ได้อนุญาต'; el.style.color = ''; }
 }
 
-// ── EVENT LISTENERS ───────────────────────────────────────────────────
-document.getElementById('tab-daily').addEventListener('click',   () => switchTab('daily'));
-document.getElementById('tab-weekly').addEventListener('click',  () => switchTab('weekly'));
-document.getElementById('tab-special').addEventListener('click', () => switchTab('special'));
-document.getElementById('nav-quest').addEventListener('click',    () => showPage('quest'));
-document.getElementById('nav-notify').addEventListener('click',   () => showPage('notify'));
-document.getElementById('nav-settings').addEventListener('click', () => showPage('settings'));
+document.getElementById('tab-daily').addEventListener('click',   function() { switchTab('daily'); });
+document.getElementById('tab-weekly').addEventListener('click',  function() { switchTab('weekly'); });
+document.getElementById('tab-special').addEventListener('click', function() { switchTab('special'); });
+document.getElementById('nav-quest').addEventListener('click',    function() { showPage('quest'); });
+document.getElementById('nav-notify').addEventListener('click',   function() { showPage('notify'); });
+document.getElementById('nav-settings').addEventListener('click', function() { showPage('settings'); });
 document.getElementById('fab-btn').addEventListener('click', openAddModal);
-document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === document.getElementById('modal-overlay')) closeModal(); });
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
 document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
 document.getElementById('modal-save-btn').addEventListener('click', saveQuest);
 document.getElementById('modal-delete-btn').addEventListener('click', deleteQuest);
-document.getElementById('reset-daily-btn').addEventListener('click',   () => resetTab('daily'));
-document.getElementById('reset-weekly-btn').addEventListener('click',  () => resetTab('weekly'));
-document.getElementById('reset-special-btn').addEventListener('click', () => resetTab('special'));
+document.getElementById('reset-daily-btn').addEventListener('click',   function() { resetTab('daily'); });
+document.getElementById('reset-weekly-btn').addEventListener('click',  function() { resetTab('weekly'); });
+document.getElementById('reset-special-btn').addEventListener('click', function() { resetTab('special'); });
 document.getElementById('clear-all-btn').addEventListener('click', clearAll);
-document.getElementById('notif-perm-btn').addEventListener('click', () => {
-  if (!('Notification' in window)) { showToast('❌ ไม่รองรับ'); return; }
-  Notification.requestPermission().then(p => {
-    showToast(p === 'granted' ? '✅ เปิดการแจ้งเตือนสำเร็จ!' : '❌ ไม่ได้รับอนุญาต');
+document.getElementById('notif-perm-btn').addEventListener('click', function() {
+  if (!('Notification' in window)) { showToast('ไม่รองรับ'); return; }
+  Notification.requestPermission().then(function(p) {
+    showToast(p === 'granted' ? 'เปิดการแจ้งเตือนสำเร็จ!' : 'ไม่ได้รับอนุญาต');
     loadNotifyUI();
   });
 });
-document.getElementById('test-notif-btn').addEventListener('click', () => {
-  if (Notification.permission !== 'granted') { showToast('⚠️ อนุญาตการแจ้งเตือนก่อน'); return; }
-  new Notification('MFF Quest Tracker ⚡', { body: '⏰ ทดสอบแจ้งเตือน — Daily reset ใกล้แล้ว!' });
+document.getElementById('test-notif-btn').addEventListener('click', function() {
+  if (Notification.permission !== 'granted') { showToast('อนุญาตการแจ้งเตือนก่อน'); return; }
+  new Notification('MFF Quest Tracker', {body: 'ทดสอบแจ้งเตือน — Daily reset ใกล้แล้ว!'});
 });
-document.getElementById('save-notify-btn').addEventListener('click', async () => {
+document.getElementById('save-notify-btn').addEventListener('click', function() {
   settings.dailyNotifyMin  = parseInt(document.getElementById('daily-notify-min').value);
   settings.dailyResetTime  = document.getElementById('daily-reset-time').value;
   settings.weeklyNotifyMin = parseInt(document.getElementById('weekly-notify-min').value);
   settings.weeklyResetDay  = parseInt(document.getElementById('weekly-reset-day').value);
   startCountdown();
-  showToast('💾 บันทึกการตั้งค่าแล้ว');
-  await saveSettingsToCloud(settings);
+  showToast('บันทึกการตั้งค่าแล้ว');
+  saveSettingsToCloud(settings);
 });
-document.addEventListener('keydown', e => {
+document.addEventListener('keydown', function(e) {
   if (!document.getElementById('modal-overlay').classList.contains('open')) return;
   if (e.key === 'Enter') saveQuest();
   if (e.key === 'Escape') closeModal();
 });
 
-// ── REALTIME LISTENER + INIT ──────────────────────────────────────────
-async function init() {
+function init() {
   setSyncStatus('ing', 'กำลังโหลด...');
-  try {
-    // โหลด settings
-    const settSnap = await getDoc(settingsDocRef);
-    if (settSnap.exists()) settings = { ...DEFAULT_SETTINGS, ...settSnap.data() };
+  var settingsPromise = getDoc(settingsRef).then(function(snap) {
+    if (snap.exists()) settings = Object.assign({}, DEFAULT_SETTINGS, snap.data());
+  }).catch(function() {});
 
-    // โหลด quests
-    const qSnap = await getDoc(questsDocRef);
+  settingsPromise.then(function() {
+    return getDoc(questsRef);
+  }).then(function(qSnap) {
     if (qSnap.exists() && qSnap.data().list) {
       quests = qSnap.data().list;
     } else {
-      // ครั้งแรก — บันทึก default ขึ้น cloud
-      quests = DEFAULT_QUESTS.map(x => ({ ...x }));
-      await saveQuestsToCloud(quests);
+      quests = DEFAULT_QUESTS.map(function(x) { return Object.assign({}, x); });
+      return saveQuestsToCloud(quests);
     }
-
-    // เช็ค auto reset
-    await checkAutoReset();
-
-    // ซ่อน loading
+  }).then(function() {
+    return checkAutoReset();
+  }).then(function() {
     document.getElementById('loading-overlay').classList.add('hide');
     refresh();
     startCountdown();
     setInterval(updateDate, 30000);
     setSyncStatus('ok', 'sync แล้ว');
-
-    // Real-time listener — อัปเดตทุกครั้งที่ข้อมูลใน Firestore เปลี่ยน
-    onSnapshot(questsDocRef, snap => {
+    onSnapshot(questsRef, function(snap) {
       if (snap.exists() && snap.data().list && !isSaving) {
         quests = snap.data().list;
         refresh();
         setSyncStatus('ok', 'sync แล้ว');
       }
     });
-
-    // เช็ค reset ทุก 1 นาที
-    setInterval(async () => {
-      await checkAutoReset();
-      refresh();
+    setInterval(function() {
+      checkAutoReset().then(function() { refresh(); });
     }, 60000);
-
-  } catch(e) {
+  }).catch(function(e) {
     console.error('init error', e);
     setSyncStatus('err', 'เชื่อมต่อไม่ได้');
-    // fallback localStorage
     try {
-      const backup = localStorage.getItem('mff_quests_backup');
-      if (backup) quests = JSON.parse(backup);
-      else quests = DEFAULT_QUESTS.map(x => ({ ...x }));
-    } catch(_) { quests = DEFAULT_QUESTS.map(x => ({ ...x })); }
+      var backup = localStorage.getItem('mff_quests_backup');
+      quests = backup ? JSON.parse(backup) : DEFAULT_QUESTS.map(function(x) { return Object.assign({}, x); });
+    } catch(_) {
+      quests = DEFAULT_QUESTS.map(function(x) { return Object.assign({}, x); });
+    }
     document.getElementById('loading-overlay').classList.add('hide');
     refresh();
     startCountdown();
     setInterval(updateDate, 30000);
-    showToast('⚠️ ออฟไลน์ — ใช้ข้อมูลในเครื่อง');
-  }
+    showToast('ออฟไลน์ — ใช้ข้อมูลในเครื่อง');
+  });
 }
 
 init();
 </script>
-
 </body>
 </html>
