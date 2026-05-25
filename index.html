@@ -346,59 +346,69 @@ function loadResetLog() {
   }).catch(function() { return {}; });
 }
 
-function getLastResetDate(resetTimeStr) {
-  var parts = resetTimeStr.split(':');
+// คืนเวลา reset ล่าสุดที่ผ่านไปแล้ว (เป็น Date object)
+function getLastDailyResetDate() {
+  var parts = settings.dailyResetTime.split(':');
   var rh = parseInt(parts[0]);
   var rm = parseInt(parts[1]);
   var now = new Date();
   var d = new Date(now);
   d.setHours(rh, rm, 0, 0);
+  // ถ้าเวลา reset วันนี้ยังไม่ถึง ใช้เมื่อวาน
   if (d > now) d.setDate(d.getDate() - 1);
   return d;
 }
 
-function checkAutoReset() {
+function getLastWeeklyResetDate() {
+  var parts = settings.dailyResetTime.split(':');
+  var rh = parseInt(parts[0]);
+  var rm = parseInt(parts[1]);
   var now = new Date();
-  var lastResetTime = getLastResetDate(settings.dailyResetTime);
+  var targetDay = parseInt(settings.weeklyResetDay);
+  var d = new Date(now);
+  d.setHours(rh, rm, 0, 0);
+  // หาวัน reset ล่าสุดที่ผ่านมา
+  var daysBack = (now.getDay() - targetDay + 7) % 7;
+  if (daysBack === 0 && d > now) daysBack = 7; // วันนี้ตรง แต่ยังไม่ถึงเวลา
+  d.setDate(d.getDate() - daysBack);
+  return d;
+}
+
+function checkAutoReset() {
   return loadResetLog().then(function(log) {
-    var promises = [];
+    var now = new Date();
+    var dailyResetDate  = getLastDailyResetDate();
+    var weeklyResetDate = getLastWeeklyResetDate();
     var changed = false;
 
+    // --- Daily ---
     var lastDaily = log.lastDailyReset ? new Date(log.lastDailyReset) : null;
-    if (!lastDaily || lastDaily < lastResetTime) {
+    // reset ถ้า: ไม่เคย reset เลย หรือ reset ครั้งล่าสุดก่อนรอบ reset ปัจจุบัน
+    if (!lastDaily || lastDaily < dailyResetDate) {
       quests = quests.map(function(q) {
         return q.type === 'daily' ? Object.assign({}, q, {done: false}) : q;
       });
       log.lastDailyReset = now.toISOString();
       changed = true;
-      showToast('Daily Quest ถูก reset แล้ว!');
+      showToast('Daily Quest reset แล้ว!');
     }
 
-    var parts = settings.dailyResetTime.split(':');
-    var rh = parseInt(parts[0]);
-    var rm = parseInt(parts[1]);
-    var targetDay = parseInt(settings.weeklyResetDay);
-    var weeklyRef2 = new Date(now);
-    weeklyRef2.setHours(rh, rm, 0, 0);
-    var daysBack = (now.getDay() - targetDay + 7) % 7;
-    if (daysBack === 0 && now < weeklyRef2) daysBack = 7;
-    weeklyRef2.setDate(weeklyRef2.getDate() - daysBack);
-
+    // --- Weekly ---
     var lastWeekly = log.lastWeeklyReset ? new Date(log.lastWeeklyReset) : null;
-    if (!lastWeekly || lastWeekly < weeklyRef2) {
+    if (!lastWeekly || lastWeekly < weeklyResetDate) {
       quests = quests.map(function(q) {
         return q.type === 'weekly' ? Object.assign({}, q, {done: false}) : q;
       });
       log.lastWeeklyReset = now.toISOString();
       changed = true;
-      showToast('Weekly Quest ถูก reset แล้ว!');
+      showToast('Weekly Quest reset แล้ว!');
     }
 
+    // save เฉพาะเมื่อมีการ reset จริง
     if (changed) {
-      promises.push(saveQuestsToCloud(quests));
-      promises.push(saveResetLog(log));
+      return Promise.all([saveQuestsToCloud(quests), saveResetLog(log)]);
     }
-    return Promise.all(promises);
+    return Promise.resolve();
   });
 }
 
